@@ -33,7 +33,11 @@ export function MainLayout({ children }: MainLayoutProps) {
   };
 
   return (
-    <div className="flex h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className={cn(
+      'flex h-screen',
+      'bg-gradient-to-br from-primary-50/30 via-surface-light-secondary to-primary-100/20',
+      'dark:from-surface-dark dark:via-surface-dark-secondary dark:to-surface-dark-tertiary'
+    )}>
       <Sidebar
         isCollapsed={sidebarCollapsed}
         onToggle={handleToggleSidebar}
@@ -51,8 +55,8 @@ export function MainLayout({ children }: MainLayoutProps) {
 
       <div
         className={cn(
-          'flex-1 flex flex-col transition-all duration-300 w-full min-w-0',
-          sidebarCollapsed ? 'lg:ml-16' : 'lg:ml-64'
+          'flex-1 flex flex-col transition-all duration-500 w-full min-w-0',
+          sidebarCollapsed ? 'lg:ml-20' : 'lg:ml-72'
         )}
       >
         <Header onMenuClick={() => setMobileMenuOpen(true)} />
