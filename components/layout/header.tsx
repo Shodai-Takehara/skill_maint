@@ -5,32 +5,48 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { NotificationPanel } from '@/components/notifications/notification-panel';
 import { LineSelector } from '@/components/line-selector/line-selector';
-import { Bell, Wifi, WifiOff } from 'lucide-react';
+import { Bell, Menu } from 'lucide-react';
 
-export function Header() {
-  const [isOnline, setIsOnline] = useState(true);
+interface HeaderProps {
+  onMenuClick?: () => void;
+}
+
+export function Header({ onMenuClick }: HeaderProps) {
+  const [isOnline] = useState(true);
   const [notifications] = useState(3);
   const [showNotifications, setShowNotifications] = useState(false);
   const [selectedLineId, setSelectedLineId] = useState<string>('line-1-1');
 
-  const handleLineSelect = (lineId: string, lineName: string) => {
+  const handleLineSelect = (lineId: string, _lineName: string) => {
     setSelectedLineId(lineId);
-    console.log('Selected line:', lineId, lineName);
   };
 
   return (
     <header className="bg-white/80 backdrop-blur-xl border-b border-gray-200/50 sticky top-0 z-30 h-16 w-full">
-      <div className="flex items-center justify-between h-full px-6">
-        {/* 左側: ライン選択 */}
-        <div className="flex-1 max-w-xs">
-          <LineSelector
-            selectedLineId={selectedLineId}
-            onLineSelect={handleLineSelect}
-          />
+      <div className="flex items-center justify-between h-full px-4 lg:px-6">
+        {/* 左側: ハンバーガーメニュー（モバイルのみ）とライン選択 */}
+        <div className="flex items-center space-x-4 flex-1">
+          {/* モバイルハンバーガーメニュー */}
+          <Button
+            variant="ghost"
+            size="sm"
+            className="lg:hidden p-2"
+            onClick={onMenuClick}
+          >
+            <Menu className="h-5 w-5" />
+          </Button>
+
+          {/* ライン選択 */}
+          <div className="flex-1 max-w-xs min-w-0">
+            <LineSelector
+              selectedLineId={selectedLineId}
+              onLineSelect={handleLineSelect}
+            />
+          </div>
         </div>
 
         {/* 右側: 通知・接続ステータス・バージョン */}
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-2 lg:space-x-4">
           {/* 接続ステータス */}
           <div className="hidden md:flex items-center space-x-2">
             {isOnline ? (
@@ -76,10 +92,12 @@ export function Header() {
               )}
             </Button>
 
-            <NotificationPanel
-              isOpen={showNotifications}
-              onClose={() => setShowNotifications(false)}
-            />
+            {showNotifications && (
+              <NotificationPanel
+                isOpen={showNotifications}
+                onClose={() => setShowNotifications(false)}
+              />
+            )}
           </div>
         </div>
       </div>

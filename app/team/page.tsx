@@ -243,9 +243,9 @@ export default function TeamPage() {
     return matchesSearch && matchesDepartment;
   });
 
-  const departments = [
-    ...new Set(teamMembers.map((member) => member.department)),
-  ];
+  const departments = Array.from(
+    new Set(teamMembers.map((member) => member.department))
+  );
 
   return (
     <MainLayout>

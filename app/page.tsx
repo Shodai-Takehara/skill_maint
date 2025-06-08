@@ -11,7 +11,6 @@ import {
   Wrench,
   Clock,
   Users,
-  AlertTriangle,
   CheckCircle,
   Calendar,
   ArrowRight,

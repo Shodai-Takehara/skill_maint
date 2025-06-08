@@ -227,7 +227,7 @@ export function NotificationPanel({ isOpen, onClose }: NotificationPanelProps) {
       />
 
       {/* 通知パネル */}
-      <div className="fixed inset-x-4 top-20 bottom-4 z-50 lg:absolute lg:inset-auto lg:right-0 lg:top-full lg:mt-2 lg:w-96">
+      <div className="fixed inset-x-4 top-20 bottom-4 z-[60] lg:absolute lg:inset-auto lg:right-0 lg:top-full lg:mt-2 lg:w-96">
         <Card className="h-full lg:h-auto lg:max-h-[600px] bg-white/95 backdrop-blur-xl shadow-xl border border-gray-200/50 flex flex-col rounded-2xl">
           {/* ヘッダー（固定） */}
           <CardHeader className="flex-shrink-0 border-b border-gray-200/50 p-6">

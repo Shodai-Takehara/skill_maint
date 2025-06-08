@@ -1,21 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { MainLayout } from '@/components/layout/main-layout';
-import {
-  Search,
-  Plus,
-  Settings,
-  Calendar,
-  Clock,
-  User,
-  Filter,
-  ChevronDown,
-} from 'lucide-react';
+import { Search, Plus, Settings, Calendar, Clock, User } from 'lucide-react';
 import Link from 'next/link';
 
 interface WorkOrder {
