@@ -1,11 +1,11 @@
 'use client';
 
-import { MainLayout } from '@/components/layout/main-layout';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
+import { MainLayout } from '@widgets/layout';
+import { Avatar, AvatarFallback } from '@shared/ui/avatar';
+import { Badge } from '@shared/ui/badge';
+import { Button } from '@shared/ui/button';
+import { Card, CardContent } from '@shared/ui/card';
+import { Input } from '@shared/ui/input';
 import { Mail, Phone, Plus, Search, Users } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
