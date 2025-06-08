@@ -6,15 +6,15 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { MainLayout } from '@/components/layout/main-layout';
-import { 
-  Search, 
+import {
+  Search,
   QrCode,
   Settings,
   Calendar,
   AlertTriangle,
   CheckCircle,
   Wrench,
-  Filter
+  Filter,
 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -47,8 +47,9 @@ export default function EquipmentPage() {
         status: 'operational',
         lastMaintenance: '2024-12-15',
         nextMaintenance: '2025-01-15',
-        image: 'https://images.pexels.com/photos/162553/keys-workshop-mechanic-tools-162553.jpeg',
-        qrCode: 'QR-EQ-001'
+        image:
+          'https://images.pexels.com/photos/162553/keys-workshop-mechanic-tools-162553.jpeg',
+        qrCode: 'QR-EQ-001',
       },
       {
         id: 'EQ-002',
@@ -58,8 +59,9 @@ export default function EquipmentPage() {
         status: 'maintenance',
         lastMaintenance: '2024-12-20',
         nextMaintenance: '2025-02-20',
-        image: 'https://images.pexels.com/photos/162553/keys-workshop-mechanic-tools-162553.jpeg',
-        qrCode: 'QR-EQ-002'
+        image:
+          'https://images.pexels.com/photos/162553/keys-workshop-mechanic-tools-162553.jpeg',
+        qrCode: 'QR-EQ-002',
       },
       {
         id: 'EQ-003',
@@ -69,8 +71,9 @@ export default function EquipmentPage() {
         status: 'operational',
         lastMaintenance: '2024-11-30',
         nextMaintenance: '2025-01-30',
-        image: 'https://images.pexels.com/photos/162553/keys-workshop-mechanic-tools-162553.jpeg',
-        qrCode: 'QR-EQ-003'
+        image:
+          'https://images.pexels.com/photos/162553/keys-workshop-mechanic-tools-162553.jpeg',
+        qrCode: 'QR-EQ-003',
       },
       {
         id: 'EQ-004',
@@ -80,8 +83,9 @@ export default function EquipmentPage() {
         status: 'breakdown',
         lastMaintenance: '2024-12-10',
         nextMaintenance: '2025-01-10',
-        image: 'https://images.pexels.com/photos/162553/keys-workshop-mechanic-tools-162553.jpeg',
-        qrCode: 'QR-EQ-004'
+        image:
+          'https://images.pexels.com/photos/162553/keys-workshop-mechanic-tools-162553.jpeg',
+        qrCode: 'QR-EQ-004',
       },
       {
         id: 'EQ-005',
@@ -91,8 +95,9 @@ export default function EquipmentPage() {
         status: 'operational',
         lastMaintenance: '2024-12-25',
         nextMaintenance: '2025-02-25',
-        image: 'https://images.pexels.com/photos/162553/keys-workshop-mechanic-tools-162553.jpeg',
-        qrCode: 'QR-EQ-005'
+        image:
+          'https://images.pexels.com/photos/162553/keys-workshop-mechanic-tools-162553.jpeg',
+        qrCode: 'QR-EQ-005',
       },
       {
         id: 'EQ-006',
@@ -102,44 +107,59 @@ export default function EquipmentPage() {
         status: 'operational',
         lastMaintenance: '2024-12-18',
         nextMaintenance: '2025-01-18',
-        image: 'https://images.pexels.com/photos/162553/keys-workshop-mechanic-tools-162553.jpeg',
-        qrCode: 'QR-EQ-006'
-      }
+        image:
+          'https://images.pexels.com/photos/162553/keys-workshop-mechanic-tools-162553.jpeg',
+        qrCode: 'QR-EQ-006',
+      },
     ]);
   }, []);
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'operational': return 'bg-green-500 text-white';
-      case 'maintenance': return 'bg-yellow-500 text-white';
-      case 'breakdown': return 'bg-red-500 text-white';
-      default: return 'bg-gray-500 text-white';
+      case 'operational':
+        return 'bg-green-500 text-white';
+      case 'maintenance':
+        return 'bg-yellow-500 text-white';
+      case 'breakdown':
+        return 'bg-red-500 text-white';
+      default:
+        return 'bg-gray-500 text-white';
     }
   };
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case 'operational': return '稼働中';
-      case 'maintenance': return 'メンテナンス中';
-      case 'breakdown': return '故障';
-      default: return '不明';
+      case 'operational':
+        return '稼働中';
+      case 'maintenance':
+        return 'メンテナンス中';
+      case 'breakdown':
+        return '故障';
+      default:
+        return '不明';
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'operational': return <CheckCircle className="h-4 w-4" />;
-      case 'maintenance': return <Wrench className="h-4 w-4" />;
-      case 'breakdown': return <AlertTriangle className="h-4 w-4" />;
-      default: return <Settings className="h-4 w-4" />;
+      case 'operational':
+        return <CheckCircle className="h-4 w-4" />;
+      case 'maintenance':
+        return <Wrench className="h-4 w-4" />;
+      case 'breakdown':
+        return <AlertTriangle className="h-4 w-4" />;
+      default:
+        return <Settings className="h-4 w-4" />;
     }
   };
 
-  const filteredEquipment = equipment.filter(item => {
-    const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         item.model.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         item.location.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesFilter = filterStatus === 'all' || item.status === filterStatus;
+  const filteredEquipment = equipment.filter((item) => {
+    const matchesSearch =
+      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.model.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.location.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesFilter =
+      filterStatus === 'all' || item.status === filterStatus;
     return matchesSearch && matchesFilter;
   });
 
@@ -191,7 +211,10 @@ export default function EquipmentPage() {
         {/* 設備グリッド */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredEquipment.map((item) => (
-            <Card key={item.id} className="bg-white shadow-sm border border-gray-200 hover:shadow-md transition-shadow cursor-pointer">
+            <Card
+              key={item.id}
+              className="bg-white shadow-sm border border-gray-200 hover:shadow-md transition-shadow cursor-pointer"
+            >
               <Link href={`/equipment/${item.id}`}>
                 <CardContent className="p-0">
                   <div className="relative h-48 bg-gray-100 rounded-t-lg overflow-hidden">
@@ -202,7 +225,10 @@ export default function EquipmentPage() {
                       className="object-cover"
                     />
                     <div className="absolute top-3 right-3">
-                      <Badge className={getStatusColor(item.status)} variant="default">
+                      <Badge
+                        className={getStatusColor(item.status)}
+                        variant="default"
+                      >
                         <div className="flex items-center space-x-1">
                           {getStatusIcon(item.status)}
                           <span>{getStatusText(item.status)}</span>
@@ -213,33 +239,44 @@ export default function EquipmentPage() {
                   <div className="p-6">
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex-1">
-                        <h3 className="text-lg font-semibold text-gray-900 mb-1">{item.name}</h3>
-                        <p className="text-sm text-gray-600 mb-1">{item.model}</p>
+                        <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                          {item.name}
+                        </h3>
+                        <p className="text-sm text-gray-600 mb-1">
+                          {item.model}
+                        </p>
                         <p className="text-xs text-gray-500">{item.location}</p>
                       </div>
                       <div className="bg-gray-100 p-2 rounded-lg">
                         <QrCode className="h-6 w-6 text-gray-600" />
                       </div>
                     </div>
-                    
+
                     <div className="space-y-3">
                       <div className="flex items-center justify-between text-sm">
                         <span className="text-gray-600">前回保守:</span>
                         <span className="font-medium">
-                          {new Date(item.lastMaintenance).toLocaleDateString('ja-JP')}
+                          {new Date(item.lastMaintenance).toLocaleDateString(
+                            'ja-JP'
+                          )}
                         </span>
                       </div>
                       <div className="flex items-center justify-between text-sm">
                         <span className="text-gray-600">次回保守:</span>
                         <span className="font-medium text-blue-600">
-                          {new Date(item.nextMaintenance).toLocaleDateString('ja-JP')}
+                          {new Date(item.nextMaintenance).toLocaleDateString(
+                            'ja-JP'
+                          )}
                         </span>
                       </div>
                     </div>
 
                     <div className="mt-4 pt-4 border-t border-gray-100">
                       <div className="flex gap-2">
-                        <Button size="sm" className="flex-1 bg-blue-600 hover:bg-blue-700">
+                        <Button
+                          size="sm"
+                          className="flex-1 bg-blue-600 hover:bg-blue-700"
+                        >
                           <Calendar className="h-4 w-4 mr-1" />
                           保守予約
                         </Button>
@@ -259,7 +296,9 @@ export default function EquipmentPage() {
         {filteredEquipment.length === 0 && (
           <div className="text-center py-12">
             <Settings className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">設備が見つかりません</h3>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">
+              設備が見つかりません
+            </h3>
             <p className="text-gray-600">検索条件を変更してお試しください。</p>
           </div>
         )}

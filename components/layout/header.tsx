@@ -5,11 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { NotificationPanel } from '@/components/notifications/notification-panel';
 import { LineSelector } from '@/components/line-selector/line-selector';
-import { 
-  Bell, 
-  Wifi,
-  WifiOff
-} from 'lucide-react';
+import { Bell, Wifi, WifiOff } from 'lucide-react';
 
 export function Header() {
   const [isOnline, setIsOnline] = useState(true);
@@ -27,7 +23,7 @@ export function Header() {
       <div className="flex items-center justify-between h-full px-6">
         {/* 左側: ライン選択 */}
         <div className="flex-1 max-w-xs">
-          <LineSelector 
+          <LineSelector
             selectedLineId={selectedLineId}
             onLineSelect={handleLineSelect}
           />
@@ -40,28 +36,35 @@ export function Header() {
             {isOnline ? (
               <div className="flex items-center space-x-2">
                 <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-                <span className="text-sm text-gray-600 font-medium">オンライン</span>
+                <span className="text-sm text-gray-600 font-medium">
+                  オンライン
+                </span>
               </div>
             ) : (
               <div className="flex items-center space-x-2">
                 <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                <span className="text-sm text-gray-600 font-medium">オフライン</span>
+                <span className="text-sm text-gray-600 font-medium">
+                  オフライン
+                </span>
               </div>
             )}
           </div>
 
           {/* バージョン情報 */}
           <div className="hidden md:block">
-            <Badge variant="outline" className="text-xs font-medium border-gray-300 text-gray-600 bg-gray-50/50">
+            <Badge
+              variant="outline"
+              className="text-xs font-medium border-gray-300 text-gray-600 bg-gray-50/50"
+            >
               v2.1.0
             </Badge>
           </div>
 
           {/* 通知 */}
           <div className="relative">
-            <Button 
-              variant="ghost" 
-              size="sm" 
+            <Button
+              variant="ghost"
+              size="sm"
               className="relative h-10 w-10 p-0 hover:bg-gray-100/80 rounded-xl transition-all duration-200"
               onClick={() => setShowNotifications(!showNotifications)}
             >
@@ -72,8 +75,8 @@ export function Header() {
                 </div>
               )}
             </Button>
-            
-            <NotificationPanel 
+
+            <NotificationPanel
               isOpen={showNotifications}
               onClose={() => setShowNotifications(false)}
             />

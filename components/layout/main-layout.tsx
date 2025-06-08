@@ -13,9 +13,7 @@ export function MainLayout({ children }: MainLayoutProps) {
       <Sidebar />
       <div className="flex-1 flex flex-col lg:ml-64 transition-all duration-300 w-full min-w-0">
         <Header />
-        <main className="flex-1 overflow-auto">
-          {children}
-        </main>
+        <main className="flex-1 overflow-auto">{children}</main>
       </div>
     </div>
   );

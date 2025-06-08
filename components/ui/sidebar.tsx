@@ -6,16 +6,16 @@ import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { 
-  Home, 
-  Settings, 
-  Wrench, 
-  Users, 
+import {
+  Home,
+  Settings,
+  Wrench,
+  Users,
   Award,
   Menu,
   X,
   User,
-  LogOut
+  LogOut,
 } from 'lucide-react';
 
 const navigation = [
@@ -61,27 +61,29 @@ export function Sidebar() {
 
       {/* オーバーレイ (モバイル・タブレット) */}
       {isOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
           onClick={() => setIsOpen(false)}
         />
       )}
 
       {/* サイドバー */}
-      <div className={cn(
-        "fixed top-0 left-0 z-50 h-full bg-white border-r border-gray-200 transition-transform duration-300 ease-in-out flex flex-col",
-        "w-64", // 全デバイスで統一幅
-        // モバイル・タブレット: スライドイン/アウト
-        "lg:translate-x-0",
-        isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
-      )}>
+      <div
+        className={cn(
+          'fixed top-0 left-0 z-50 h-full bg-white border-r border-gray-200 transition-transform duration-300 ease-in-out flex flex-col',
+          'w-64', // 全デバイスで統一幅
+          // モバイル・タブレット: スライドイン/アウト
+          'lg:translate-x-0',
+          isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+        )}
+      >
         {/* ヘッダー部分 */}
         <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200">
           {/* サービス名 */}
           <div className="flex items-center">
             <span className="text-xl font-bold text-gray-900">SkillMaint</span>
           </div>
-          
+
           {/* 閉じるボタン (モバイル・タブレットのみ) */}
           <Button
             variant="ghost"
@@ -103,16 +105,18 @@ export function Sidebar() {
                 href={item.href}
                 onClick={handleNavClick}
                 className={cn(
-                  "flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors",
+                  'flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors',
                   isActive
-                    ? "bg-blue-50 text-blue-700 border-r-2 border-blue-700"
-                    : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+                    ? 'bg-blue-50 text-blue-700 border-r-2 border-blue-700'
+                    : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
                 )}
               >
-                <item.icon className={cn(
-                  "mr-3 h-5 w-5",
-                  isActive ? "text-blue-700" : "text-gray-400"
-                )} />
+                <item.icon
+                  className={cn(
+                    'mr-3 h-5 w-5',
+                    isActive ? 'text-blue-700' : 'text-gray-400'
+                  )}
+                />
                 {item.name}
               </Link>
             );
@@ -132,7 +136,7 @@ export function Sidebar() {
               <p className="text-xs text-gray-500">主任技師</p>
             </div>
           </div>
-          
+
           <div className="space-y-1">
             <Button
               variant="ghost"
