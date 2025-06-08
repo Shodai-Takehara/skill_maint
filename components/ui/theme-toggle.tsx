@@ -28,16 +28,20 @@ export function ThemeToggle({ showLabel = false }: ThemeToggleProps) {
       >
         <div className="flex items-center">
           <div className="relative mr-3">
-            <Sun className={cn(
-              'h-4 w-4 transition-all duration-300',
-              'text-primary-500 dark:text-primary-400',
-              isDark ? 'rotate-90 scale-0' : 'rotate-0 scale-100'
-            )} />
-            <Moon className={cn(
-              'absolute top-0 left-0 h-4 w-4 transition-all duration-300',
-              'text-primary-500 dark:text-primary-400',
-              isDark ? 'rotate-0 scale-100' : '-rotate-90 scale-0'
-            )} />
+            <Sun
+              className={cn(
+                'h-4 w-4 transition-all duration-300',
+                'text-primary-500 dark:text-primary-400',
+                isDark ? 'rotate-90 scale-0' : 'rotate-0 scale-100'
+              )}
+            />
+            <Moon
+              className={cn(
+                'absolute top-0 left-0 h-4 w-4 transition-all duration-300',
+                'text-primary-500 dark:text-primary-400',
+                isDark ? 'rotate-0 scale-100' : '-rotate-90 scale-0'
+              )}
+            />
           </div>
           <span className="font-medium">
             {isDark ? 'ライトモード' : 'ダークモード'}
@@ -59,16 +63,20 @@ export function ThemeToggle({ showLabel = false }: ThemeToggleProps) {
         'backdrop-blur-sm shadow-sm'
       )}
     >
-      <Sun className={cn(
-        'h-5 w-5 transition-all duration-300',
-        'text-primary-600 dark:text-primary-300',
-        isDark ? 'rotate-90 scale-0' : 'rotate-0 scale-100'
-      )} />
-      <Moon className={cn(
-        'absolute h-5 w-5 transition-all duration-300',
-        'text-primary-600 dark:text-primary-300',
-        isDark ? 'rotate-0 scale-100' : '-rotate-90 scale-0'
-      )} />
+      <Sun
+        className={cn(
+          'h-5 w-5 transition-all duration-300',
+          'text-primary-600 dark:text-primary-300',
+          isDark ? 'rotate-90 scale-0' : 'rotate-0 scale-100'
+        )}
+      />
+      <Moon
+        className={cn(
+          'absolute h-5 w-5 transition-all duration-300',
+          'text-primary-600 dark:text-primary-300',
+          isDark ? 'rotate-0 scale-100' : '-rotate-90 scale-0'
+        )}
+      />
       <span className="sr-only">テーマを切り替え</span>
     </Button>
   );

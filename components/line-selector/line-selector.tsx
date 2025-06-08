@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { ChevronDown, MapPin, Factory, Settings, Check } from 'lucide-react';
+import { Check, ChevronDown, Factory, MapPin, Settings } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 interface OrganizationNode {
   id: string;
@@ -169,7 +169,7 @@ export function LineSelector({
         setSelectedLine(line);
       }
     }
-  }, [selectedLineId, organizationData.length]); // organizationData.lengthで変更を検知
+  }, [selectedLineId, organizationData]); // organizationDataで変更を検知
 
   const toggleNode = (nodeId: string) => {
     const newExpanded = new Set(expandedNodes);
@@ -237,7 +237,8 @@ export function LineSelector({
 
         {hasChildren && isExpanded && (
           <div>
-            {node.children!.map((child) => renderNode(child, depth + 1))}
+            {node.children &&
+              node.children.map((child) => renderNode(child, depth + 1))}
           </div>
         )}
       </div>

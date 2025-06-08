@@ -33,11 +33,13 @@ export function MainLayout({ children }: MainLayoutProps) {
   };
 
   return (
-    <div className={cn(
-      'flex h-screen',
-      'bg-gradient-to-br from-primary-50/30 via-surface-light-secondary to-primary-100/20',
-      'dark:from-surface-dark dark:via-surface-dark-secondary dark:to-surface-dark-tertiary'
-    )}>
+    <div
+      className={cn(
+        'flex h-screen',
+        'bg-gradient-to-br from-primary-50/30 via-surface-light-secondary to-primary-100/20',
+        'dark:from-surface-dark dark:via-surface-dark-secondary dark:to-surface-dark-tertiary'
+      )}
+    >
       <Sidebar
         isCollapsed={sidebarCollapsed}
         onToggle={handleToggleSidebar}
