@@ -251,7 +251,7 @@ export default function QuickInspectionPage() {
 
                 <div className="flex flex-col space-y-2 lg:ml-6">
                   {selectedEquipment.nextInspection ? (
-                    <Button size="lg" className="touch-target">
+                    <Button size="lg\" className="touch-target">
                       <Play className="h-4 w-4 mr-2" />
                       Start Inspection
                     </Button>
