@@ -1,34 +1,27 @@
-import './globals.css';
-import { Inter } from 'next/font/google';
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
+import './globals.css'
+import { CompanyProvider } from '@/contexts/company-context'
 
-import { ThemeProvider } from '@app/providers';
-
-import type { Metadata } from 'next';
-
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'SkillMaint - 製造設備保守管理システム',
-  description: 'スキルベースの製造設備保守管理システム',
-};
+  title: 'MaintEdu - Maintenance & Skill Management',
+  description: 'Modern maintenance and skill management system for manufacturing companies',
+}
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
   return (
-    <html lang="ja" suppressHydrationWarning>
+    <html lang="en">
       <body className={inter.className}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem
-          disableTransitionOnChange={false}
-        >
+        <CompanyProvider>
           {children}
-        </ThemeProvider>
+        </CompanyProvider>
       </body>
     </html>
-  );
+  )
 }
