@@ -1,10 +1,12 @@
 'use client';
 
 import * as React from 'react';
+
 import { Moon, Sun } from 'lucide-react';
+
 import { useTheme } from '@shared/hooks/use-theme';
-import { Button } from '@shared/ui/button';
 import { cn } from '@shared/lib';
+import { Button } from '@shared/ui/button';
 
 interface ThemeToggleProps {
   showLabel?: boolean;

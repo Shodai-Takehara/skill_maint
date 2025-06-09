@@ -1,11 +1,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@shared/ui/card';
-import { Button } from '@shared/ui/button';
-import { Input } from '@shared/ui/input';
-import { MainLayout } from '@widgets/layout';
+
 import { Users, Plus, Search } from 'lucide-react';
+
+import { Button } from '@shared/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@shared/ui/card';
+import { Input } from '@shared/ui/input';
+
+import { MainLayout } from '@widgets/layout';
 
 interface TeamMember {
   id: string;

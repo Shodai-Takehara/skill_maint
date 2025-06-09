@@ -1,9 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Sidebar } from '@shared/ui/sidebar';
-import { Header } from '@widgets/header';
+
 import { cn } from '@shared/lib';
+import { Sidebar } from '@shared/ui/sidebar';
+
+import { Header } from '@widgets/header';
 
 interface MainLayoutProps {
   children: React.ReactNode;

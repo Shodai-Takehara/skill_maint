@@ -1,10 +1,12 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+
+import { Check, ChevronDown, Factory, MapPin, Settings } from 'lucide-react';
+
 import { Button } from '@shared/ui/button';
 import { Card, CardContent } from '@shared/ui/card';
 import { ScrollArea } from '@shared/ui/scroll-area';
-import { Check, ChevronDown, Factory, MapPin, Settings } from 'lucide-react';
-import { useEffect, useState } from 'react';
 
 interface OrganizationNode {
   id: string;

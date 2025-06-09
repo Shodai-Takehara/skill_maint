@@ -1,10 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@shared/ui/card';
-import { Badge } from '@shared/ui/badge';
-import { Button } from '@shared/ui/button';
-import { ScrollArea } from '@shared/ui/scroll-area';
+
 import {
   Bell,
   X,
@@ -15,6 +12,11 @@ import {
   Trash2,
   BookmarkCheck as MarkAsRead,
 } from 'lucide-react';
+
+import { Badge } from '@shared/ui/badge';
+import { Button } from '@shared/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@shared/ui/card';
+import { ScrollArea } from '@shared/ui/scroll-area';
 
 interface Notification {
   id: string;

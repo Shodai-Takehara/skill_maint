@@ -1,12 +1,15 @@
 'use client';
 
 import { useState } from 'react';
-import { Button } from '@shared/ui/button';
-import { Badge } from '@shared/ui/badge';
-import { NotificationPanel } from '@widgets/notifications';
-import { LineSelector } from '@widgets/line-selector';
+
 import { Bell, Menu } from 'lucide-react';
+
 import { cn } from '@shared/lib';
+import { Badge } from '@shared/ui/badge';
+import { Button } from '@shared/ui/button';
+
+import { LineSelector } from '@widgets/line-selector';
+import { NotificationPanel } from '@widgets/notifications';
 
 interface HeaderProps {
   onMenuClick?: () => void;

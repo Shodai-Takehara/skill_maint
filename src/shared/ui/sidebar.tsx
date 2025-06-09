@@ -1,15 +1,8 @@
 'use client';
 
-import { Avatar, AvatarFallback } from '@shared/ui/avatar';
-import { Button } from '@shared/ui/button';
-import { ThemeToggle } from '@shared/ui/theme-toggle';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@shared/ui/tooltip';
-import { cn } from '@shared/lib';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+
 import {
   Award,
   Home,
@@ -20,8 +13,17 @@ import {
   Wrench,
   X,
 } from 'lucide-react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+
+import { cn } from '@shared/lib';
+import { Avatar, AvatarFallback } from '@shared/ui/avatar';
+import { Button } from '@shared/ui/button';
+import { ThemeToggle } from '@shared/ui/theme-toggle';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@shared/ui/tooltip';
 
 const navigation = [
   { name: 'ダッシュボード', href: '/', icon: Home },

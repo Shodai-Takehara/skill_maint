@@ -1,11 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@shared/ui/card';
-import { Badge } from '@shared/ui/badge';
-import { Button } from '@shared/ui/button';
-import { Progress } from '@shared/ui/progress';
-import { MainLayout } from '@widgets/layout';
+
+import Link from 'next/link';
+
 import {
   Settings,
   Wrench,
@@ -16,7 +14,13 @@ import {
   ArrowRight,
   QrCode,
 } from 'lucide-react';
-import Link from 'next/link';
+
+import { Badge } from '@shared/ui/badge';
+import { Button } from '@shared/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@shared/ui/card';
+import { Progress } from '@shared/ui/progress';
+
+import { MainLayout } from '@widgets/layout';
 
 interface WorkOrder {
   id: string;

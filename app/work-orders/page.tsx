@@ -1,13 +1,17 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Card, CardContent } from '@shared/ui/card';
+
+import Link from 'next/link';
+
+import { Search, Plus, Settings, Calendar, Clock, User } from 'lucide-react';
+
 import { Badge } from '@shared/ui/badge';
 import { Button } from '@shared/ui/button';
+import { Card, CardContent } from '@shared/ui/card';
 import { Input } from '@shared/ui/input';
+
 import { MainLayout } from '@widgets/layout';
-import { Search, Plus, Settings, Calendar, Clock, User } from 'lucide-react';
-import Link from 'next/link';
 
 interface WorkOrder {
   id: string;

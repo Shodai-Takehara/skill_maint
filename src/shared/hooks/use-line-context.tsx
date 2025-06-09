@@ -1,6 +1,12 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from 'react';
 
 interface LineContextType {
   selectedLineId: string | null;
@@ -18,7 +24,7 @@ export function LineProvider({ children }: { children: ReactNode }) {
     // ローカルストレージから前回選択したラインを復元
     const savedLineId = localStorage.getItem('selectedLineId');
     const savedLineName = localStorage.getItem('selectedLineName');
-    
+
     if (savedLineId && savedLineName) {
       setSelectedLineId(savedLineId);
       setSelectedLineName(savedLineName);
@@ -28,18 +34,20 @@ export function LineProvider({ children }: { children: ReactNode }) {
   const setSelectedLine = (lineId: string, lineName: string) => {
     setSelectedLineId(lineId);
     setSelectedLineName(lineName);
-    
+
     // ローカルストレージに保存
     localStorage.setItem('selectedLineId', lineId);
     localStorage.setItem('selectedLineName', lineName);
   };
 
   return (
-    <LineContext.Provider value={{
-      selectedLineId,
-      selectedLineName,
-      setSelectedLine
-    }}>
+    <LineContext.Provider
+      value={{
+        selectedLineId,
+        selectedLineName,
+        setSelectedLine,
+      }}
+    >
       {children}
     </LineContext.Provider>
   );

@@ -1,11 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Card, CardContent } from '@shared/ui/card';
-import { Badge } from '@shared/ui/badge';
-import { Button } from '@shared/ui/button';
-import { Input } from '@shared/ui/input';
-import { MainLayout } from '@widgets/layout';
+
+import Image from 'next/image';
+import Link from 'next/link';
+
 import {
   Search,
   QrCode,
@@ -15,8 +14,13 @@ import {
   CheckCircle,
   Wrench,
 } from 'lucide-react';
-import Link from 'next/link';
-import Image from 'next/image';
+
+import { Badge } from '@shared/ui/badge';
+import { Button } from '@shared/ui/button';
+import { Card, CardContent } from '@shared/ui/card';
+import { Input } from '@shared/ui/input';
+
+import { MainLayout } from '@widgets/layout';
 
 interface Equipment {
   id: string;
