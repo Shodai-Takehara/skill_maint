@@ -1,0 +1,49 @@
+services:
+  # 開発環境
+  dev:
+    container_name: skillmaint-dev
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - '3000:3000'
+    volumes:
+      # ホットリロードのためにソースコードをマウント
+      - .:/app
+      # node_modulesはコンテナ内のものを使用
+      - /app/node_modules
+      # .nextディレクトリもコンテナ内のものを使用
+      - /app/.next
+    environment:
+      - NODE_ENV=development
+      - WATCHPACK_POLLING=true
+    networks:
+      - skillmaint-network
+    profiles:
+      - dev
+
+  # プロダクション環境
+  prod:
+    container_name: skillmaint-prod
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=production
+    networks:
+      - skillmaint-network
+    profiles:
+      - prod
+
+  # 開発環境（デフォルト）
+  app:
+    extends:
+      service: dev
+    profiles:
+      - ''
+
+networks:
+  skillmaint-network:
+    driver: bridge

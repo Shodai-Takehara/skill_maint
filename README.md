@@ -26,6 +26,7 @@ src/
 
 - Node.js 20.x 以上
 - npm 9.x 以上
+- Docker & Docker Compose（Docker使用時）
 
 ### インストール
 
@@ -39,11 +40,50 @@ cp .env.example .env.local
 
 ### 開発サーバーの起動
 
+#### ローカル環境
+
 ```bash
 npm run dev
 ```
 
+#### Docker環境（推奨）
+
+```bash
+# 開発環境（デフォルト）
+docker compose up
+
+# バックグラウンド実行
+docker compose up -d
+
+# 本番環境
+docker compose --profile prod up
+
+# コンテナを停止
+docker compose down
+```
+
 [http://localhost:3000](http://localhost:3000) でアプリケーションが起動します。
+
+## 🐳 Docker構成
+
+### サービス構成
+
+- **dev**: 開発環境（ホットリロード対応）
+- **prod**: 本番環境（最適化ビルド）
+- **app**: デフォルトサービス（dev環境を継承）
+
+### Docker環境の特徴
+
+- **開発環境**:
+
+  - ホットリロード機能
+  - ソースコードの自動同期
+  - 高速な開発体験
+
+- **本番環境**:
+  - マルチステージビルド
+  - 最適化されたイメージサイズ
+  - セキュリティ強化（非rootユーザー）
 
 ## 📝 利用可能なスクリプト
 
