@@ -5,6 +5,8 @@ import { usePathname } from 'next/navigation';
 
 import {
   Award,
+  ClipboardCheck,
+  FileText,
   Home,
   LogOut,
   Menu,
@@ -27,6 +29,8 @@ import {
 
 const navigation = [
   { name: 'ダッシュボード', href: '/', icon: Home },
+  { name: '今日の点検', href: '/inspections', icon: ClipboardCheck },
+  { name: 'テンプレート', href: '/templates', icon: FileText },
   { name: '設備管理', href: '/equipment', icon: Settings },
   { name: '作業指示', href: '/work-orders', icon: Wrench },
   { name: 'スキル管理', href: '/skills', icon: Award },
