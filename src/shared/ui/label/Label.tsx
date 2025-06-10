@@ -1,9 +1,11 @@
 'use client';
 
 import { forwardRef } from 'react';
+
 import { cn } from '@shared/lib';
 
-export interface LabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
+export interface LabelProps
+  extends React.LabelHTMLAttributes<HTMLLabelElement> {
   children: React.ReactNode;
 }
 

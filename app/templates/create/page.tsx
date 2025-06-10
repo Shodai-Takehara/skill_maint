@@ -1,30 +1,32 @@
 'use client';
 
 import { useState } from 'react';
-import { ArrowLeft, Plus, Trash2, Settings, Eye, Save } from 'lucide-react';
+
 import Link from 'next/link';
 
+import { ArrowLeft, Plus, Trash2, Settings, Eye, Save } from 'lucide-react';
+
+import { Badge } from '@shared/ui/badge';
 import { Button } from '@shared/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@shared/ui/card';
 import { Input } from '@shared/ui/input';
 import { Label } from '@shared/ui/label';
-import { Badge } from '@shared/ui/badge';
 import { Textarea } from '@shared/ui/textarea';
 
 import { MainLayout } from '@widgets/layout';
 
 // フィールドタイプの定義
-export type FieldType = 
-  | 'numeric' 
-  | 'text' 
-  | 'textarea' 
-  | 'select' 
-  | 'checkbox' 
-  | 'radio' 
-  | 'temperature' 
-  | 'pressure' 
-  | 'photo' 
-  | 'pass_fail' 
+export type FieldType =
+  | 'numeric'
+  | 'text'
+  | 'textarea'
+  | 'select'
+  | 'checkbox'
+  | 'radio'
+  | 'temperature'
+  | 'pressure'
+  | 'photo'
+  | 'pass_fail'
   | 'signature';
 
 // フィールド設定の型定義
@@ -34,7 +36,7 @@ export interface InspectionField {
   label: string;
   description?: string;
   required: boolean;
-  
+
   // 数値系フィールド用設定
   minValue?: number;
   maxValue?: number;
@@ -43,18 +45,18 @@ export interface InspectionField {
   normalMax?: number;
   warningMin?: number;
   warningMax?: number;
-  
+
   // 選択系フィールド用設定
   options?: string[];
   allowMultiple?: boolean;
-  
+
   // 条件表示設定
   showWhen?: {
     fieldId: string;
     condition: 'equals' | 'greater' | 'less';
     value: string | number;
   };
-  
+
   // デフォルト値
   defaultValue?: string | number | boolean;
 }
@@ -67,14 +69,14 @@ export interface InspectionTemplate {
   category: string;
   equipmentType: string;
   version: number;
-  
+
   // シフト別設定
   shifts: {
     id: string;
     name: string;
     fields: InspectionField[];
   }[];
-  
+
   // スケジュール設定
   schedules: {
     id: string;
@@ -83,22 +85,72 @@ export interface InspectionTemplate {
     shiftId: string;
     daysOfWeek: number[];
   }[];
-  
+
   createdAt: string;
   updatedAt: string;
   createdBy: string;
 }
 
-const FIELD_TYPES: { value: FieldType; label: string; description: string; icon: string }[] = [
-  { value: 'numeric', label: '数値入力', description: '数値データの入力（閾値設定可能）', icon: '123' },
-  { value: 'temperature', label: '温度計測', description: '温度の測定と正常範囲の設定', icon: '🌡️' },
-  { value: 'pressure', label: '圧力計測', description: '圧力・流量・回転数等の測定', icon: '⚡' },
-  { value: 'text', label: 'テキスト入力', description: '短いテキストの入力', icon: 'Aa' },
-  { value: 'textarea', label: '長文入力', description: '詳細なコメントや説明の入力', icon: '📝' },
-  { value: 'select', label: '選択肢', description: '単一または複数選択', icon: '☑️' },
-  { value: 'pass_fail', label: '合否判定', description: '合格/不合格の二択判定', icon: '✓' },
-  { value: 'photo', label: '写真撮影', description: '現場写真の撮影とアップロード', icon: '📷' },
-  { value: 'signature', label: 'デジタル署名', description: '点検者のデジタル署名', icon: '✍️' },
+const FIELD_TYPES: {
+  value: FieldType;
+  label: string;
+  description: string;
+  icon: string;
+}[] = [
+  {
+    value: 'numeric',
+    label: '数値入力',
+    description: '数値データの入力（閾値設定可能）',
+    icon: '123',
+  },
+  {
+    value: 'temperature',
+    label: '温度計測',
+    description: '温度の測定と正常範囲の設定',
+    icon: '🌡️',
+  },
+  {
+    value: 'pressure',
+    label: '圧力計測',
+    description: '圧力・流量・回転数等の測定',
+    icon: '⚡',
+  },
+  {
+    value: 'text',
+    label: 'テキスト入力',
+    description: '短いテキストの入力',
+    icon: 'Aa',
+  },
+  {
+    value: 'textarea',
+    label: '長文入力',
+    description: '詳細なコメントや説明の入力',
+    icon: '📝',
+  },
+  {
+    value: 'select',
+    label: '選択肢',
+    description: '単一または複数選択',
+    icon: '☑️',
+  },
+  {
+    value: 'pass_fail',
+    label: '合否判定',
+    description: '合格/不合格の二択判定',
+    icon: '✓',
+  },
+  {
+    value: 'photo',
+    label: '写真撮影',
+    description: '現場写真の撮影とアップロード',
+    icon: '📷',
+  },
+  {
+    value: 'signature',
+    label: 'デジタル署名',
+    description: '点検者のデジタル署名',
+    icon: '✍️',
+  },
 ];
 
 export default function CreateTemplatePage() {
@@ -111,47 +163,53 @@ export default function CreateTemplatePage() {
       {
         id: 'default',
         name: '標準点検',
-        fields: []
-      }
+        fields: [],
+      },
     ],
-    schedules: []
+    schedules: [],
   });
 
   const [activeShift, setActiveShift] = useState(0);
-  const [draggedField, setDraggedField] = useState<FieldType | null>(null);
   const [showPreview, setShowPreview] = useState(false);
 
   const addField = (type: FieldType) => {
     const newField: InspectionField = {
       id: `field_${Date.now()}`,
       type,
-      label: `新しい${FIELD_TYPES.find(ft => ft.value === type)?.label}`,
+      label: `新しい${FIELD_TYPES.find((ft) => ft.value === type)?.label}`,
       required: false,
-      ...(type === 'numeric' || type === 'temperature' || type === 'pressure' ? {
-        unit: type === 'temperature' ? '℃' : type === 'pressure' ? 'kPa' : '',
-        minValue: 0,
-        maxValue: 100,
-      } : {}),
-      ...(type === 'select' || type === 'radio' ? {
-        options: ['選択肢1', '選択肢2'],
-        allowMultiple: type === 'select'
-      } : {})
+      ...(type === 'numeric' || type === 'temperature' || type === 'pressure'
+        ? {
+            unit:
+              type === 'temperature' ? '℃' : type === 'pressure' ? 'kPa' : '',
+            minValue: 0,
+            maxValue: 100,
+          }
+        : {}),
+      ...(type === 'select' || type === 'radio'
+        ? {
+            options: ['選択肢1', '選択肢2'],
+            allowMultiple: type === 'select',
+          }
+        : {}),
     };
 
     const updatedShifts = [...(template.shifts || [])];
     updatedShifts[activeShift].fields.push(newField);
-    
+
     setTemplate({ ...template, shifts: updatedShifts });
   };
 
   const updateField = (fieldId: string, updates: Partial<InspectionField>) => {
     const updatedShifts = [...(template.shifts || [])];
-    const fieldIndex = updatedShifts[activeShift].fields.findIndex(f => f.id === fieldId);
-    
+    const fieldIndex = updatedShifts[activeShift].fields.findIndex(
+      (f) => f.id === fieldId
+    );
+
     if (fieldIndex !== -1) {
       updatedShifts[activeShift].fields[fieldIndex] = {
         ...updatedShifts[activeShift].fields[fieldIndex],
-        ...updates
+        ...updates,
       };
       setTemplate({ ...template, shifts: updatedShifts });
     }
@@ -159,7 +217,9 @@ export default function CreateTemplatePage() {
 
   const removeField = (fieldId: string) => {
     const updatedShifts = [...(template.shifts || [])];
-    updatedShifts[activeShift].fields = updatedShifts[activeShift].fields.filter(f => f.id !== fieldId);
+    updatedShifts[activeShift].fields = updatedShifts[
+      activeShift
+    ].fields.filter((f) => f.id !== fieldId);
     setTemplate({ ...template, shifts: updatedShifts });
   };
 
@@ -167,17 +227,17 @@ export default function CreateTemplatePage() {
     const newShift = {
       id: `shift_${Date.now()}`,
       name: `シフト${(template.shifts?.length || 0) + 1}`,
-      fields: []
+      fields: [],
     };
-    setTemplate({ 
-      ...template, 
-      shifts: [...(template.shifts || []), newShift] 
+    setTemplate({
+      ...template,
+      shifts: [...(template.shifts || []), newShift],
     });
   };
 
   const saveTemplate = () => {
     // テンプレート保存処理
-    console.log('テンプレート保存:', template);
+    // TODO: 実際の保存処理を実装
     alert('テンプレートが保存されました！');
   };
 
@@ -194,19 +254,26 @@ export default function CreateTemplatePage() {
               </Button>
             </Link>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">点検テンプレート作成</h1>
-              <p className="text-gray-600 mt-1">柔軟な点検項目を設定して、効率的な点検業務を実現</p>
+              <h1 className="text-3xl font-bold text-gray-900">
+                点検テンプレート作成
+              </h1>
+              <p className="text-gray-600 mt-1">
+                柔軟な点検項目を設定して、効率的な点検業務を実現
+              </p>
             </div>
           </div>
           <div className="flex space-x-3">
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               onClick={() => setShowPreview(!showPreview)}
             >
               <Eye className="h-4 w-4 mr-2" />
               プレビュー
             </Button>
-            <Button onClick={saveTemplate} className="bg-blue-600 hover:bg-blue-700">
+            <Button
+              onClick={saveTemplate}
+              className="bg-blue-600 hover:bg-blue-700"
+            >
               <Save className="h-4 w-4 mr-2" />
               保存
             </Button>
@@ -226,7 +293,9 @@ export default function CreateTemplatePage() {
                   <Input
                     id="name"
                     value={template.name}
-                    onChange={(e) => setTemplate({ ...template, name: e.target.value })}
+                    onChange={(e) =>
+                      setTemplate({ ...template, name: e.target.value })
+                    }
                     placeholder="例：CNCフライス盤 日常点検"
                   />
                 </div>
@@ -235,7 +304,9 @@ export default function CreateTemplatePage() {
                   <Textarea
                     id="description"
                     value={template.description}
-                    onChange={(e) => setTemplate({ ...template, description: e.target.value })}
+                    onChange={(e) =>
+                      setTemplate({ ...template, description: e.target.value })
+                    }
                     placeholder="このテンプレートの目的や使用方法を説明"
                     rows={3}
                   />
@@ -245,7 +316,9 @@ export default function CreateTemplatePage() {
                   <select
                     id="category"
                     value={template.category}
-                    onChange={(e) => setTemplate({ ...template, category: e.target.value })}
+                    onChange={(e) =>
+                      setTemplate({ ...template, category: e.target.value })
+                    }
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   >
                     <option value="">カテゴリを選択</option>
@@ -261,7 +334,12 @@ export default function CreateTemplatePage() {
                   <Input
                     id="equipmentType"
                     value={template.equipmentType}
-                    onChange={(e) => setTemplate({ ...template, equipmentType: e.target.value })}
+                    onChange={(e) =>
+                      setTemplate({
+                        ...template,
+                        equipmentType: e.target.value,
+                      })
+                    }
                     placeholder="例：CNCフライス盤、プレス機"
                   />
                 </div>
@@ -282,15 +360,17 @@ export default function CreateTemplatePage() {
                     <div
                       key={fieldType.value}
                       className="p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-blue-50 hover:border-blue-300 transition-colors"
-                      draggable
-                      onDragStart={() => setDraggedField(fieldType.value)}
                       onClick={() => addField(fieldType.value)}
                     >
                       <div className="flex items-center space-x-3">
                         <span className="text-lg">{fieldType.icon}</span>
                         <div>
-                          <div className="font-medium text-sm">{fieldType.label}</div>
-                          <div className="text-xs text-gray-500">{fieldType.description}</div>
+                          <div className="font-medium text-sm">
+                            {fieldType.label}
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            {fieldType.description}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -308,7 +388,7 @@ export default function CreateTemplatePage() {
                 {template.shifts?.map((shift, index) => (
                   <Button
                     key={shift.id}
-                    variant={activeShift === index ? "default" : "outline"}
+                    variant={activeShift === index ? 'default' : 'outline'}
                     size="sm"
                     onClick={() => setActiveShift(index)}
                   >
@@ -329,7 +409,8 @@ export default function CreateTemplatePage() {
             <Card>
               <CardHeader>
                 <CardTitle>
-                  {template.shifts?.[activeShift]?.name || '標準点検'} - 点検項目
+                  {template.shifts?.[activeShift]?.name || '標準点検'} -
+                  点検項目
                 </CardTitle>
                 <p className="text-sm text-gray-600">
                   点検項目をドラッグして並び替えできます
@@ -344,7 +425,7 @@ export default function CreateTemplatePage() {
                       </p>
                     </div>
                   ) : (
-                    template.shifts?.[activeShift]?.fields.map((field, index) => (
+                    template.shifts?.[activeShift]?.fields.map((field) => (
                       <FieldEditor
                         key={field.id}
                         field={field}
@@ -379,7 +460,7 @@ function FieldEditor({ field, onUpdate, onRemove }: FieldEditorProps) {
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <Badge variant="outline">
-              {FIELD_TYPES.find(ft => ft.value === field.type)?.label}
+              {FIELD_TYPES.find((ft) => ft.value === field.type)?.label}
             </Badge>
             <Input
               value={field.label}
@@ -428,7 +509,9 @@ function FieldEditor({ field, onUpdate, onRemove }: FieldEditorProps) {
         </div>
 
         {/* タイプ別設定 */}
-        {(field.type === 'numeric' || field.type === 'temperature' || field.type === 'pressure') && (
+        {(field.type === 'numeric' ||
+          field.type === 'temperature' ||
+          field.type === 'pressure') && (
           <div className="space-y-3 bg-gray-50 p-4 rounded-lg">
             <h4 className="font-medium">数値設定</h4>
             <div className="grid grid-cols-3 gap-3">
@@ -438,7 +521,9 @@ function FieldEditor({ field, onUpdate, onRemove }: FieldEditorProps) {
                   id={`min-${field.id}`}
                   type="number"
                   value={field.minValue || ''}
-                  onChange={(e) => onUpdate({ minValue: Number(e.target.value) })}
+                  onChange={(e) =>
+                    onUpdate({ minValue: Number(e.target.value) })
+                  }
                 />
               </div>
               <div>
@@ -447,7 +532,9 @@ function FieldEditor({ field, onUpdate, onRemove }: FieldEditorProps) {
                   id={`max-${field.id}`}
                   type="number"
                   value={field.maxValue || ''}
-                  onChange={(e) => onUpdate({ maxValue: Number(e.target.value) })}
+                  onChange={(e) =>
+                    onUpdate({ maxValue: Number(e.target.value) })
+                  }
                 />
               </div>
               <div>
@@ -462,21 +549,29 @@ function FieldEditor({ field, onUpdate, onRemove }: FieldEditorProps) {
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <Label htmlFor={`normalMin-${field.id}`}>正常範囲（下限）</Label>
+                <Label htmlFor={`normalMin-${field.id}`}>
+                  正常範囲（下限）
+                </Label>
                 <Input
                   id={`normalMin-${field.id}`}
                   type="number"
                   value={field.normalMin || ''}
-                  onChange={(e) => onUpdate({ normalMin: Number(e.target.value) })}
+                  onChange={(e) =>
+                    onUpdate({ normalMin: Number(e.target.value) })
+                  }
                 />
               </div>
               <div>
-                <Label htmlFor={`normalMax-${field.id}`}>正常範囲（上限）</Label>
+                <Label htmlFor={`normalMax-${field.id}`}>
+                  正常範囲（上限）
+                </Label>
                 <Input
                   id={`normalMax-${field.id}`}
                   type="number"
                   value={field.normalMax || ''}
-                  onChange={(e) => onUpdate({ normalMax: Number(e.target.value) })}
+                  onChange={(e) =>
+                    onUpdate({ normalMax: Number(e.target.value) })
+                  }
                 />
               </div>
             </div>
@@ -487,13 +582,13 @@ function FieldEditor({ field, onUpdate, onRemove }: FieldEditorProps) {
           <div className="space-y-3 bg-gray-50 p-4 rounded-lg">
             <h4 className="font-medium">選択肢設定</h4>
             <div className="space-y-2">
-              {field.options?.map((option, index) => (
-                <div key={index} className="flex items-center space-x-2">
+              {field.options?.map((option, optionIndex) => (
+                <div key={optionIndex} className="flex items-center space-x-2">
                   <Input
                     value={option}
                     onChange={(e) => {
                       const newOptions = [...(field.options || [])];
-                      newOptions[index] = e.target.value;
+                      newOptions[optionIndex] = e.target.value;
                       onUpdate({ options: newOptions });
                     }}
                   />
@@ -501,7 +596,9 @@ function FieldEditor({ field, onUpdate, onRemove }: FieldEditorProps) {
                     variant="ghost"
                     size="sm"
                     onClick={() => {
-                      const newOptions = field.options?.filter((_, i) => i !== index);
+                      const newOptions = field.options?.filter(
+                        (_, i) => i !== optionIndex
+                      );
                       onUpdate({ options: newOptions });
                     }}
                   >

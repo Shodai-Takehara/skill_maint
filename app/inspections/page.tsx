@@ -1,19 +1,28 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Calendar, Clock, CheckCircle, AlertTriangle, User, QrCode, Filter } from 'lucide-react';
+
 import Link from 'next/link';
 
-import { Button } from '@shared/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@shared/ui/card';
-import { Input } from '@shared/ui/input';
+import {
+  Calendar,
+  Clock,
+  CheckCircle,
+  AlertTriangle,
+  User,
+  QrCode,
+} from 'lucide-react';
+
 import { Badge } from '@shared/ui/badge';
+import { Button } from '@shared/ui/button';
+import { Card, CardContent } from '@shared/ui/card';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from '@shared/ui/dialog';
+import { Input } from '@shared/ui/input';
 
 import { MainLayout } from '@widgets/layout';
 
@@ -72,8 +81,11 @@ export default function InspectionsPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [filterShift, setFilterShift] = useState<string>('all');
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
-  const [selectedInspection, setSelectedInspection] = useState<ScheduledInspection | null>(null);
+  const [selectedDate, setSelectedDate] = useState(
+    new Date().toISOString().split('T')[0]
+  );
+  const [selectedInspection, setSelectedInspection] =
+    useState<ScheduledInspection | null>(null);
 
   useEffect(() => {
     // サンプル点検データ
@@ -96,15 +108,22 @@ export default function InspectionsPage() {
         template: {
           id: 'temp-001',
           name: '第1ライン 後面日常点検テンプレート',
-          description: '第1ライン後面部の日常点検を実施し、異常の早期発見と予防保全を行います。',
+          description:
+            '第1ライン後面部の日常点検を実施し、異常の早期発見と予防保全を行います。',
           targetArea: '後面',
           totalEstimatedTime: 45,
-          commonTools: ['デジタルノギス', '温度計', '潤滑油', 'ウエス', '懐中電灯'],
+          commonTools: [
+            'デジタルノギス',
+            '温度計',
+            '潤滑油',
+            'ウエス',
+            '懐中電灯',
+          ],
           safetyNotes: [
             '点検前に必ず電源を切断してください',
             '回転部品に手を近づけないでください',
             '保護具（安全眼鏡、手袋）を着用してください',
-            '高所作業時はヘルメットを着用してください'
+            '高所作業時はヘルメットを着用してください',
           ],
           sections: [
             {
@@ -120,7 +139,7 @@ export default function InspectionsPage() {
                   item: '結束機本体の損傷確認',
                   checkMethod: '目視点検',
                   standardValue: '亀裂・変形・腐食なし',
-                  notes: 'カバー、ガードも含めて確認'
+                  notes: 'カバー、ガードも含めて確認',
                 },
                 {
                   id: 'C-002',
@@ -128,7 +147,7 @@ export default function InspectionsPage() {
                   item: '結束モーター動作確認',
                   checkMethod: '手動運転',
                   standardValue: 'スムーズな動作、異音なし',
-                  notes: '異常振動の有無を確認'
+                  notes: '異常振動の有無を確認',
                 },
                 {
                   id: 'C-003',
@@ -136,9 +155,9 @@ export default function InspectionsPage() {
                   item: '可動部の清掃と潤滑',
                   checkMethod: '清掃後グリス塗布',
                   standardValue: '汚れなし、適量グリス塗布',
-                  notes: '古いグリスは拭き取ってから新しいグリスを塗布'
-                }
-              ]
+                  notes: '古いグリスは拭き取ってから新しいグリスを塗布',
+                },
+              ],
             },
             {
               id: 'sec-002',
@@ -153,7 +172,7 @@ export default function InspectionsPage() {
                   item: 'リールテンション確認',
                   checkMethod: 'テンションメーター測定',
                   standardValue: '80-120N',
-                  notes: '規定値外の場合は調整必要'
+                  notes: '規定値外の場合は調整必要',
                 },
                 {
                   id: 'C-005',
@@ -161,9 +180,9 @@ export default function InspectionsPage() {
                   item: 'リール表面の損傷確認',
                   checkMethod: '目視点検',
                   standardValue: '傷・毛羽立ちなし',
-                  notes: '特に縁部の状態を重点確認'
-                }
-              ]
+                  notes: '特に縁部の状態を重点確認',
+                },
+              ],
             },
             {
               id: 'sec-003',
@@ -178,9 +197,9 @@ export default function InspectionsPage() {
                   item: 'レールと車輪の確認',
                   checkMethod: '目視点検と手動確認',
                   standardValue: 'スムーズな動作、異音なし',
-                  notes: 'レールの清掃状態も確認'
-                }
-              ]
+                  notes: 'レールの清掃状態も確認',
+                },
+              ],
             },
             {
               id: 'sec-004',
@@ -195,7 +214,7 @@ export default function InspectionsPage() {
                   item: 'ロールベアリング振動測定',
                   checkMethod: '振動計による測定',
                   standardValue: '2.5mm/s以下',
-                  notes: '異常振動時はベアリング交換検討'
+                  notes: '異常振動時はベアリング交換検討',
                 },
                 {
                   id: 'C-008',
@@ -203,12 +222,12 @@ export default function InspectionsPage() {
                   item: 'ベアリンググリス確認',
                   checkMethod: '目視点検',
                   standardValue: '適量グリス有り',
-                  notes: '不足時は補充、汚れ時は交換'
-                }
-              ]
-            }
-          ]
-        }
+                  notes: '不足時は補充、汚れ時は交換',
+                },
+              ],
+            },
+          ],
+        },
       },
       {
         id: 'insp-002',
@@ -229,14 +248,15 @@ export default function InspectionsPage() {
         template: {
           id: 'temp-002',
           name: 'プレス機安全点検テンプレート',
-          description: 'プレス機の安全機能と操作部の点検を実施し、作業者の安全を確保します。',
+          description:
+            'プレス機の安全機能と操作部の点検を実施し、作業者の安全を確保します。',
           targetArea: '単一設備',
           totalEstimatedTime: 25,
           commonTools: ['テスター', 'メジャー', '清掃用具'],
           safetyNotes: [
             '点検中は他の作業者の接近を禁止してください',
             '高圧配管に注意してください',
-            '作業前に非常停止ボタンの動作を確認してください'
+            '作業前に非常停止ボタンの動作を確認してください',
           ],
           sections: [
             {
@@ -251,7 +271,7 @@ export default function InspectionsPage() {
                   item: '非常停止ボタン動作確認',
                   checkMethod: '機能テスト',
                   standardValue: '正常動作',
-                  notes: '全ての非常停止ボタンを確認'
+                  notes: '全ての非常停止ボタンを確認',
                 },
                 {
                   id: 'C-010',
@@ -259,9 +279,9 @@ export default function InspectionsPage() {
                   item: 'ライトカーテン動作確認',
                   checkMethod: '手動テスト',
                   standardValue: '正常停止',
-                  notes: 'カーテンの整列状態も確認'
-                }
-              ]
+                  notes: 'カーテンの整列状態も確認',
+                },
+              ],
             },
             {
               id: 'sec-006',
@@ -276,7 +296,7 @@ export default function InspectionsPage() {
                   item: '油圧プレッシャー確認',
                   checkMethod: 'ゲージ読み取り',
                   standardValue: '10-15MPa',
-                  notes: '異常音の有無も確認'
+                  notes: '異常音の有無も確認',
                 },
                 {
                   id: 'C-012',
@@ -284,12 +304,12 @@ export default function InspectionsPage() {
                   item: '油漏れ確認',
                   checkMethod: '目視点検',
                   standardValue: '漏れなし',
-                  notes: 'ホース、ジョイント部を重点確認'
-                }
-              ]
-            }
-          ]
-        }
+                  notes: 'ホース、ジョイント部を重点確認',
+                },
+              ],
+            },
+          ],
+        },
       },
       {
         id: 'insp-003',
@@ -306,7 +326,7 @@ export default function InspectionsPage() {
         priority: 'medium',
         estimatedDuration: 35,
         lastCompleted: '2024-12-30T16:05:00',
-        completionRate: 100
+        completionRate: 100,
       },
       {
         id: 'insp-004',
@@ -323,7 +343,7 @@ export default function InspectionsPage() {
         priority: 'medium',
         estimatedDuration: 25,
         lastCompleted: '2024-12-29T14:00:00',
-        completionRate: 92
+        completionRate: 92,
       },
       {
         id: 'insp-005',
@@ -339,7 +359,7 @@ export default function InspectionsPage() {
         priority: 'high',
         estimatedDuration: 60,
         lastCompleted: '2024-12-29T00:30:00',
-        completionRate: 85
+        completionRate: 85,
       },
       {
         id: 'insp-006',
@@ -355,62 +375,86 @@ export default function InspectionsPage() {
         priority: 'low',
         estimatedDuration: 90,
         lastCompleted: '2024-12-23T09:00:00',
-        completionRate: 78
-      }
+        completionRate: 78,
+      },
     ];
-    
+
     setInspections(sampleInspections);
   }, []);
 
   const filteredInspections = inspections.filter((inspection) => {
-    const matchesSearch = 
-      inspection.templateName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (inspection.equipmentName && inspection.equipmentName.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      (inspection.lineName && inspection.lineName.toLowerCase().includes(searchTerm.toLowerCase())) ||
+    const matchesSearch =
+      inspection.templateName
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+      (inspection.equipmentName &&
+        inspection.equipmentName
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase())) ||
+      (inspection.lineName &&
+        inspection.lineName.toLowerCase().includes(searchTerm.toLowerCase())) ||
       inspection.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
       inspection.targetArea.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = 
+    const matchesStatus =
       filterStatus === 'all' || inspection.status === filterStatus;
-    const matchesShift = 
+    const matchesShift =
       filterShift === 'all' || inspection.shift === filterShift;
     return matchesSearch && matchesStatus && matchesShift;
   });
 
   const getStatusBadgeColor = (status: string) => {
     switch (status) {
-      case 'completed': return 'bg-green-500 text-white';
-      case 'in_progress': return 'bg-blue-500 text-white';
-      case 'overdue': return 'bg-red-500 text-white';
-      case 'pending': return 'bg-yellow-500 text-white';
-      default: return 'bg-gray-500 text-white';
+      case 'completed':
+        return 'bg-green-500 text-white';
+      case 'in_progress':
+        return 'bg-blue-500 text-white';
+      case 'overdue':
+        return 'bg-red-500 text-white';
+      case 'pending':
+        return 'bg-yellow-500 text-white';
+      default:
+        return 'bg-gray-500 text-white';
     }
   };
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case 'completed': return '完了';
-      case 'in_progress': return '実行中';
-      case 'overdue': return '期限超過';
-      case 'pending': return '待機中';
-      default: return '不明';
+      case 'completed':
+        return '完了';
+      case 'in_progress':
+        return '実行中';
+      case 'overdue':
+        return '期限超過';
+      case 'pending':
+        return '待機中';
+      default:
+        return '不明';
     }
   };
 
   const getPriorityBadgeColor = (priority: string) => {
     switch (priority) {
-      case 'high': return 'bg-red-100 text-red-800';
-      case 'medium': return 'bg-yellow-100 text-yellow-800';
-      case 'low': return 'bg-green-100 text-green-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'high':
+        return 'bg-red-100 text-red-800';
+      case 'medium':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'low':
+        return 'bg-green-100 text-green-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
   };
 
   const getPriorityText = (priority: string) => {
     switch (priority) {
-      case 'high': return '高';
-      case 'medium': return '中';
-      case 'low': return '低';
-      default: return '-';
+      case 'high':
+        return '高';
+      case 'medium':
+        return '中';
+      case 'low':
+        return '低';
+      default:
+        return '-';
     }
   };
 
@@ -419,8 +463,10 @@ export default function InspectionsPage() {
     const scheduled = new Date(`${selectedDate}T${scheduledTime}`);
     const diff = scheduled.getTime() - now.getTime();
     const hours = Math.floor(Math.abs(diff) / (1000 * 60 * 60));
-    const minutes = Math.floor((Math.abs(diff) % (1000 * 60 * 60)) / (1000 * 60));
-    
+    const minutes = Math.floor(
+      (Math.abs(diff) % (1000 * 60 * 60)) / (1000 * 60)
+    );
+
     if (diff < 0) {
       return `${hours}時間${minutes}分超過`;
     } else {
@@ -430,10 +476,10 @@ export default function InspectionsPage() {
 
   const statusCounts = {
     total: inspections.length,
-    pending: inspections.filter(i => i.status === 'pending').length,
-    in_progress: inspections.filter(i => i.status === 'in_progress').length,
-    completed: inspections.filter(i => i.status === 'completed').length,
-    overdue: inspections.filter(i => i.status === 'overdue').length,
+    pending: inspections.filter((i) => i.status === 'pending').length,
+    in_progress: inspections.filter((i) => i.status === 'in_progress').length,
+    completed: inspections.filter((i) => i.status === 'completed').length,
+    overdue: inspections.filter((i) => i.status === 'overdue').length,
   };
 
   return (
@@ -442,13 +488,15 @@ export default function InspectionsPage() {
         {/* ヘッダー */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">今日の点検スケジュール</h1>
+            <h1 className="text-3xl font-bold text-gray-900">
+              今日の点検スケジュール
+            </h1>
             <p className="text-gray-600 mt-2">
-              {new Date(selectedDate).toLocaleDateString('ja-JP', { 
-                year: 'numeric', 
-                month: 'long', 
+              {new Date(selectedDate).toLocaleDateString('ja-JP', {
+                year: 'numeric',
+                month: 'long',
                 day: 'numeric',
-                weekday: 'long'
+                weekday: 'long',
               })}
             </p>
           </div>
@@ -473,55 +521,65 @@ export default function InspectionsPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600">総点検数</p>
-                  <p className="text-2xl font-bold text-gray-900">{statusCounts.total}</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {statusCounts.total}
+                  </p>
                 </div>
                 <Calendar className="h-6 w-6 text-gray-400" />
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600">待機中</p>
-                  <p className="text-2xl font-bold text-yellow-600">{statusCounts.pending}</p>
+                  <p className="text-2xl font-bold text-yellow-600">
+                    {statusCounts.pending}
+                  </p>
                 </div>
                 <Clock className="h-6 w-6 text-yellow-400" />
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600">実行中</p>
-                  <p className="text-2xl font-bold text-blue-600">{statusCounts.in_progress}</p>
+                  <p className="text-2xl font-bold text-blue-600">
+                    {statusCounts.in_progress}
+                  </p>
                 </div>
                 <User className="h-6 w-6 text-blue-400" />
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600">完了</p>
-                  <p className="text-2xl font-bold text-green-600">{statusCounts.completed}</p>
+                  <p className="text-2xl font-bold text-green-600">
+                    {statusCounts.completed}
+                  </p>
                 </div>
                 <CheckCircle className="h-6 w-6 text-green-400" />
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600">期限超過</p>
-                  <p className="text-2xl font-bold text-red-600">{statusCounts.overdue}</p>
+                  <p className="text-2xl font-bold text-red-600">
+                    {statusCounts.overdue}
+                  </p>
                 </div>
                 <AlertTriangle className="h-6 w-6 text-red-400" />
               </div>
@@ -538,13 +596,17 @@ export default function InspectionsPage() {
                   type="text"
                   placeholder="設備名、点検テンプレート名で検索..."
                   value={searchTerm}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setSearchTerm(e.target.value)
+                  }
                   className="pl-4"
                 />
               </div>
               <select
                 value={filterStatus}
-                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFilterStatus(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                  setFilterStatus(e.target.value)
+                }
                 className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
               >
                 <option value="all">すべてのステータス</option>
@@ -555,7 +617,9 @@ export default function InspectionsPage() {
               </select>
               <select
                 value={filterShift}
-                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFilterShift(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                  setFilterShift(e.target.value)
+                }
                 className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
               >
                 <option value="all">すべてのシフト</option>
@@ -570,13 +634,16 @@ export default function InspectionsPage() {
         {/* 点検一覧 */}
         <div className="space-y-4">
           {filteredInspections.map((inspection) => (
-            <Card 
-              key={inspection.id} 
+            <Card
+              key={inspection.id}
               className={`hover:shadow-md transition-shadow duration-200 ${
-                inspection.status === 'overdue' ? 'border-l-4 border-l-red-500' :
-                inspection.status === 'in_progress' ? 'border-l-4 border-l-blue-500' :
-                inspection.status === 'completed' ? 'border-l-4 border-l-green-500' :
-                'border-l-4 border-l-yellow-500'
+                inspection.status === 'overdue'
+                  ? 'border-l-4 border-l-red-500'
+                  : inspection.status === 'in_progress'
+                    ? 'border-l-4 border-l-blue-500'
+                    : inspection.status === 'completed'
+                      ? 'border-l-4 border-l-green-500'
+                      : 'border-l-4 border-l-yellow-500'
               }`}
             >
               <CardContent className="p-6">
@@ -591,19 +658,23 @@ export default function InspectionsPage() {
                           {inspection.templateName}
                         </p>
                         <p className="text-sm text-gray-500">
-                          {inspection.equipmentLocation}
+                          {inspection.location}
                         </p>
                       </div>
                       <div className="flex flex-col items-end space-y-2">
-                        <Badge className={getStatusBadgeColor(inspection.status)}>
+                        <Badge
+                          className={getStatusBadgeColor(inspection.status)}
+                        >
                           {getStatusText(inspection.status)}
                         </Badge>
-                        <Badge className={getPriorityBadgeColor(inspection.priority)}>
+                        <Badge
+                          className={getPriorityBadgeColor(inspection.priority)}
+                        >
                           優先度: {getPriorityText(inspection.priority)}
                         </Badge>
                       </div>
                     </div>
-                    
+
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
                       <div className="flex items-center space-x-2">
                         <Clock className="h-4 w-4 text-gray-400" />
@@ -627,12 +698,16 @@ export default function InspectionsPage() {
 
                     {inspection.lastCompleted && (
                       <div className="mt-3 text-sm text-gray-500">
-                        前回完了: {new Date(inspection.lastCompleted).toLocaleDateString('ja-JP', {
-                          month: 'short',
-                          day: 'numeric',
-                          hour: '2-digit',
-                          minute: '2-digit'
-                        })}
+                        前回完了:{' '}
+                        {new Date(inspection.lastCompleted).toLocaleDateString(
+                          'ja-JP',
+                          {
+                            month: 'short',
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                          }
+                        )}
                         {inspection.completionRate && (
                           <span className="ml-2">
                             (完了率: {inspection.completionRate}%)
@@ -641,15 +716,22 @@ export default function InspectionsPage() {
                       </div>
                     )}
 
-                    {(inspection.status === 'pending' || inspection.status === 'overdue') && (
+                    {(inspection.status === 'pending' ||
+                      inspection.status === 'overdue') && (
                       <div className="mt-2 text-sm font-medium">
-                        <span className={inspection.status === 'overdue' ? 'text-red-600' : 'text-blue-600'}>
+                        <span
+                          className={
+                            inspection.status === 'overdue'
+                              ? 'text-red-600'
+                              : 'text-blue-600'
+                          }
+                        >
                           {getTimeUntilDue(inspection.scheduledTime)}
                         </span>
                       </div>
                     )}
                   </div>
-                  
+
                   <div className="mt-4 lg:mt-0 lg:ml-6">
                     <div className="flex flex-col space-y-2 lg:w-40">
                       {inspection.status === 'pending' && (
@@ -680,9 +762,9 @@ export default function InspectionsPage() {
                           </Button>
                         </Link>
                       )}
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
+                      <Button
+                        variant="outline"
+                        size="sm"
                         className="w-full"
                         onClick={() => setSelectedInspection(inspection)}
                       >
@@ -710,8 +792,8 @@ export default function InspectionsPage() {
 
         {/* 点検詳細モーダル */}
         {selectedInspection && selectedInspection.template && (
-          <Dialog 
-            open={selectedInspection !== null} 
+          <Dialog
+            open={selectedInspection !== null}
             onOpenChange={(open) => !open && setSelectedInspection(null)}
           >
             <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
@@ -728,48 +810,74 @@ export default function InspectionsPage() {
                     {selectedInspection.equipmentName && (
                       <div>
                         <p className="text-sm text-gray-600 mb-1">対象設備</p>
-                        <p className="font-medium text-gray-900">{selectedInspection.equipmentName}</p>
+                        <p className="font-medium text-gray-900">
+                          {selectedInspection.equipmentName}
+                        </p>
                       </div>
                     )}
                     {selectedInspection.lineName && (
                       <div>
                         <p className="text-sm text-gray-600 mb-1">対象ライン</p>
-                        <p className="font-medium text-gray-900">{selectedInspection.lineName}</p>
+                        <p className="font-medium text-gray-900">
+                          {selectedInspection.lineName}
+                        </p>
                       </div>
                     )}
                     <div>
                       <p className="text-sm text-gray-600 mb-1">設置場所</p>
-                      <p className="font-medium text-gray-900">{selectedInspection.location}</p>
+                      <p className="font-medium text-gray-900">
+                        {selectedInspection.location}
+                      </p>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-600 mb-1">点検対象エリア</p>
-                      <p className="font-medium text-gray-900">{selectedInspection.targetArea}</p>
+                      <p className="text-sm text-gray-600 mb-1">
+                        点検対象エリア
+                      </p>
+                      <p className="font-medium text-gray-900">
+                        {selectedInspection.targetArea}
+                      </p>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-600 mb-1">点検テンプレート</p>
-                      <p className="font-medium text-gray-900">{selectedInspection.templateName}</p>
+                      <p className="text-sm text-gray-600 mb-1">
+                        点検テンプレート
+                      </p>
+                      <p className="font-medium text-gray-900">
+                        {selectedInspection.templateName}
+                      </p>
                     </div>
                     <div>
                       <p className="text-sm text-gray-600 mb-1">予定時刻</p>
-                      <p className="font-medium text-gray-900">{selectedInspection.scheduledTime}</p>
+                      <p className="font-medium text-gray-900">
+                        {selectedInspection.scheduledTime}
+                      </p>
                     </div>
                     <div>
                       <p className="text-sm text-gray-600 mb-1">シフト</p>
-                      <p className="font-medium text-gray-900">{selectedInspection.shift}</p>
+                      <p className="font-medium text-gray-900">
+                        {selectedInspection.shift}
+                      </p>
                     </div>
                     <div>
                       <p className="text-sm text-gray-600 mb-1">所要時間</p>
-                      <p className="font-medium text-gray-900">{selectedInspection.template.totalEstimatedTime}分</p>
+                      <p className="font-medium text-gray-900">
+                        {selectedInspection.template.totalEstimatedTime}分
+                      </p>
                     </div>
                     {selectedInspection.assignedTo && (
                       <div>
                         <p className="text-sm text-gray-600 mb-1">担当者</p>
-                        <p className="font-medium text-gray-900">{selectedInspection.assignedTo}</p>
+                        <p className="font-medium text-gray-900">
+                          {selectedInspection.assignedTo}
+                        </p>
                       </div>
                     )}
                     <div>
                       <p className="text-sm text-gray-600 mb-1">優先度</p>
-                      <Badge className={getPriorityBadgeColor(selectedInspection.priority)}>
+                      <Badge
+                        className={getPriorityBadgeColor(
+                          selectedInspection.priority
+                        )}
+                      >
                         {getPriorityText(selectedInspection.priority)}
                       </Badge>
                     </div>
@@ -777,7 +885,9 @@ export default function InspectionsPage() {
                   {selectedInspection.template.description && (
                     <div className="mt-4">
                       <p className="text-sm text-gray-600 mb-1">点検概要</p>
-                      <p className="text-gray-900">{selectedInspection.template.description}</p>
+                      <p className="text-gray-900">
+                        {selectedInspection.template.description}
+                      </p>
                     </div>
                   )}
                 </div>
@@ -786,16 +896,20 @@ export default function InspectionsPage() {
                 {selectedInspection.template.safetyNotes.length > 0 && (
                   <div className="bg-red-50 p-4 rounded-lg border border-red-200">
                     <h3 className="font-semibold text-red-900 mb-3 flex items-center">
-                      <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full mr-2">重要</span>
+                      <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full mr-2">
+                        重要
+                      </span>
                       安全注意事項
                     </h3>
                     <ul className="space-y-2">
-                      {selectedInspection.template.safetyNotes.map((note, index) => (
-                        <li key={index} className="flex items-start">
-                          <span className="text-red-500 text-lg mr-2">•</span>
-                          <span className="text-red-800 text-sm">{note}</span>
-                        </li>
-                      ))}
+                      {selectedInspection.template.safetyNotes.map(
+                        (note, index) => (
+                          <li key={index} className="flex items-start">
+                            <span className="text-red-500 text-lg mr-2">•</span>
+                            <span className="text-red-800 text-sm">{note}</span>
+                          </li>
+                        )
+                      )}
                     </ul>
                   </div>
                 )}
@@ -803,13 +917,21 @@ export default function InspectionsPage() {
                 {/* 必要工具 */}
                 {selectedInspection.template.commonTools.length > 0 && (
                   <div>
-                    <h3 className="font-semibold text-gray-900 mb-3">必要工具・部品</h3>
+                    <h3 className="font-semibold text-gray-900 mb-3">
+                      必要工具・部品
+                    </h3>
                     <div className="flex flex-wrap gap-2">
-                      {selectedInspection.template.commonTools.map((tool: string, index: number) => (
-                        <Badge key={index} variant="outline" className="text-sm">
-                          {tool}
-                        </Badge>
-                      ))}
+                      {selectedInspection.template.commonTools.map(
+                        (tool: string, index: number) => (
+                          <Badge
+                            key={index}
+                            variant="outline"
+                            className="text-sm"
+                          >
+                            {tool}
+                          </Badge>
+                        )
+                      )}
                     </div>
                   </div>
                 )}
@@ -817,91 +939,139 @@ export default function InspectionsPage() {
                 {/* 点検項目（セクション別） */}
                 {selectedInspection.template.sections.length > 0 && (
                   <div>
-                    <h3 className="font-semibold text-gray-900 mb-3">点検項目（セクション別）</h3>
+                    <h3 className="font-semibold text-gray-900 mb-3">
+                      点検項目（セクション別）
+                    </h3>
                     <div className="space-y-6">
-                      {selectedInspection.template.sections.map((section: EquipmentSection) => (
-                        <div key={section.id} className="border border-gray-300 rounded-lg p-4 bg-white">
-                          <div className="mb-4">
-                            <div className="flex items-center justify-between mb-2">
-                              <h4 className="text-lg font-semibold text-gray-900">{section.name}</h4>
-                              <Badge variant="outline" className="text-xs">
-                                所要時間: {section.estimatedTime}分
-                              </Badge>
-                            </div>
-                            {section.description && (
-                              <p className="text-sm text-gray-600 mb-2">{section.description}</p>
-                            )}
-                            {section.requiredTools && section.requiredTools.length > 0 && (
-                              <div className="flex flex-wrap gap-1 mt-2">
-                                <span className="text-xs text-gray-500 mr-2">セクション専用工具:</span>
-                                {section.requiredTools.map((tool: string, index: number) => (
-                                  <Badge key={index} variant="secondary" className="text-xs">
-                                    {tool}
-                                  </Badge>
-                                ))}
+                      {selectedInspection.template.sections.map(
+                        (section: EquipmentSection) => (
+                          <div
+                            key={section.id}
+                            className="border border-gray-300 rounded-lg p-4 bg-white"
+                          >
+                            <div className="mb-4">
+                              <div className="flex items-center justify-between mb-2">
+                                <h4 className="text-lg font-semibold text-gray-900">
+                                  {section.name}
+                                </h4>
+                                <Badge variant="outline" className="text-xs">
+                                  所要時間: {section.estimatedTime}分
+                                </Badge>
                               </div>
-                            )}
-                          </div>
-                          <div className="space-y-3">
-                            {section.checkItems.map((checkItem: InspectionCheckItem) => (
-                              <div key={checkItem.id} className="border border-gray-100 rounded-md p-3 bg-gray-50">
-                                <div className="flex items-start justify-between mb-2">
-                                  <div className="flex-1">
-                                    <div className="flex items-center gap-2 mb-2">
-                                      <Badge variant="outline" className="text-xs">
-                                        {checkItem.category}
-                                      </Badge>
-                                    </div>
-                                    <h5 className="font-medium text-gray-900 mb-1">
-                                      {checkItem.item}
-                                    </h5>
-                                    <p className="text-sm text-gray-600 mb-2">
-                                      <span className="font-medium">方法:</span> {checkItem.checkMethod}
-                                    </p>
-                                    {checkItem.standardValue && (
-                                      <p className="text-sm text-gray-600 mb-2">
-                                        <span className="font-medium">基準値:</span> {checkItem.standardValue}
-                                      </p>
-                                    )}
-                                    {checkItem.notes && (
-                                      <p className="text-xs text-gray-500">
-                                        <span className="font-medium">備考:</span> {checkItem.notes}
-                                      </p>
+                              {section.description && (
+                                <p className="text-sm text-gray-600 mb-2">
+                                  {section.description}
+                                </p>
+                              )}
+                              {section.requiredTools &&
+                                section.requiredTools.length > 0 && (
+                                  <div className="flex flex-wrap gap-1 mt-2">
+                                    <span className="text-xs text-gray-500 mr-2">
+                                      セクション専用工具:
+                                    </span>
+                                    {section.requiredTools.map(
+                                      (tool: string, index: number) => (
+                                        <Badge
+                                          key={index}
+                                          variant="secondary"
+                                          className="text-xs"
+                                        >
+                                          {tool}
+                                        </Badge>
+                                      )
                                     )}
                                   </div>
-                                </div>
-                              </div>
-                            ))}
+                                )}
+                            </div>
+                            <div className="space-y-3">
+                              {section.checkItems.map(
+                                (checkItem: InspectionCheckItem) => (
+                                  <div
+                                    key={checkItem.id}
+                                    className="border border-gray-100 rounded-md p-3 bg-gray-50"
+                                  >
+                                    <div className="flex items-start justify-between mb-2">
+                                      <div className="flex-1">
+                                        <div className="flex items-center gap-2 mb-2">
+                                          <Badge
+                                            variant="outline"
+                                            className="text-xs"
+                                          >
+                                            {checkItem.category}
+                                          </Badge>
+                                        </div>
+                                        <h5 className="font-medium text-gray-900 mb-1">
+                                          {checkItem.item}
+                                        </h5>
+                                        <p className="text-sm text-gray-600 mb-2">
+                                          <span className="font-medium">
+                                            方法:
+                                          </span>{' '}
+                                          {checkItem.checkMethod}
+                                        </p>
+                                        {checkItem.standardValue && (
+                                          <p className="text-sm text-gray-600 mb-2">
+                                            <span className="font-medium">
+                                              基準値:
+                                            </span>{' '}
+                                            {checkItem.standardValue}
+                                          </p>
+                                        )}
+                                        {checkItem.notes && (
+                                          <p className="text-xs text-gray-500">
+                                            <span className="font-medium">
+                                              備考:
+                                            </span>{' '}
+                                            {checkItem.notes}
+                                          </p>
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                )
+                              )}
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        )
+                      )}
                     </div>
                   </div>
                 )}
 
                 {/* 点検履歴情報 */}
-                {(selectedInspection.lastCompleted || selectedInspection.completionRate) && (
+                {(selectedInspection.lastCompleted ||
+                  selectedInspection.completionRate) && (
                   <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                    <h3 className="font-semibold text-blue-900 mb-3">点検履歴</h3>
+                    <h3 className="font-semibold text-blue-900 mb-3">
+                      点検履歴
+                    </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {selectedInspection.lastCompleted && (
                         <div>
-                          <p className="text-sm text-blue-600 mb-1">前回完了日時</p>
+                          <p className="text-sm text-blue-600 mb-1">
+                            前回完了日時
+                          </p>
                           <p className="font-medium text-blue-900">
-                            {new Date(selectedInspection.lastCompleted).toLocaleDateString('ja-JP', {
+                            {new Date(
+                              selectedInspection.lastCompleted
+                            ).toLocaleDateString('ja-JP', {
                               year: 'numeric',
                               month: 'long',
                               day: 'numeric',
                               hour: '2-digit',
-                              minute: '2-digit'
+                              minute: '2-digit',
                             })}
                           </p>
                         </div>
                       )}
                       {selectedInspection.completionRate && (
                         <div>
-                          <p className="text-sm text-blue-600 mb-1">前回完了率</p>
-                          <p className="font-medium text-blue-900">{selectedInspection.completionRate}%</p>
+                          <p className="text-sm text-blue-600 mb-1">
+                            前回完了率
+                          </p>
+                          <p className="font-medium text-blue-900">
+                            {selectedInspection.completionRate}%
+                          </p>
                         </div>
                       )}
                     </div>
