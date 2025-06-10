@@ -4,16 +4,16 @@ import { useState } from 'react';
 
 import Link from 'next/link';
 
-import {
-  DragDropContext,
-  Droppable,
-  Draggable,
-  DropResult,
-} from '@hello-pangea/dnd';
+// Temporarily commenting out drag and drop to fix import issue
+// import {
+//   DragDropContext,
+//   Droppable,
+//   Draggable,
+//   DropResult,
+// } from '@hello-pangea/dnd';
 import {
   Plus,
   Trash2,
-  GripVertical,
   Settings,
   Save,
   ArrowLeft,
@@ -236,36 +236,92 @@ export default function NewTemplatePage() {
     setTemplate((prev) => ({ ...prev, totalEstimatedTime: total }));
   };
 
-  // セクションドラッグ&ドロップ
-  const onSectionDragEnd = (result: DropResult) => {
-    if (!result.destination) return;
+  // セクション並び替え（上下ボタン版）
+  const moveSectionUp = (sectionId: string) => {
+    const sectionIndex = template.sections.findIndex((s) => s.id === sectionId);
+    if (sectionIndex <= 0) return;
 
-    const items = Array.from(template.sections);
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
+    const newSections = [...template.sections];
+    [newSections[sectionIndex - 1], newSections[sectionIndex]] = [
+      newSections[sectionIndex],
+      newSections[sectionIndex - 1],
+    ];
 
     // 順序を更新
-    const updatedItems = items.map((item, index) => ({
+    const updatedSections = newSections.map((section, index) => ({
+      ...section,
+      order: index + 1,
+    }));
+
+    setTemplate((prev) => ({ ...prev, sections: updatedSections }));
+  };
+
+  const moveSectionDown = (sectionId: string) => {
+    const sectionIndex = template.sections.findIndex((s) => s.id === sectionId);
+    if (sectionIndex >= template.sections.length - 1) return;
+
+    const newSections = [...template.sections];
+    [newSections[sectionIndex], newSections[sectionIndex + 1]] = [
+      newSections[sectionIndex + 1],
+      newSections[sectionIndex],
+    ];
+
+    // 順序を更新
+    const updatedSections = newSections.map((section, index) => ({
+      ...section,
+      order: index + 1,
+    }));
+
+    setTemplate((prev) => ({ ...prev, sections: updatedSections }));
+  };
+
+  // 点検項目並び替え（上下ボタン版）
+  const moveCheckItemUp = (sectionId: string, itemId: string) => {
+    const section = template.sections.find((s) => s.id === sectionId);
+    if (!section) return;
+
+    const itemIndex = section.checkItems.findIndex(
+      (item) => item.id === itemId
+    );
+    if (itemIndex <= 0) return;
+
+    const newItems = [...section.checkItems];
+    [newItems[itemIndex - 1], newItems[itemIndex]] = [
+      newItems[itemIndex],
+      newItems[itemIndex - 1],
+    ];
+
+    // 順序を更新
+    const updatedItems = newItems.map((item, index) => ({
       ...item,
       order: index + 1,
     }));
 
-    setTemplate((prev) => ({ ...prev, sections: updatedItems }));
+    setTemplate((prev) => ({
+      ...prev,
+      sections: prev.sections.map((s) =>
+        s.id === sectionId ? { ...s, checkItems: updatedItems } : s
+      ),
+    }));
   };
 
-  // 点検項目ドラッグ&ドロップ
-  const onCheckItemDragEnd = (result: DropResult, sectionId: string) => {
-    if (!result.destination) return;
-
+  const moveCheckItemDown = (sectionId: string, itemId: string) => {
     const section = template.sections.find((s) => s.id === sectionId);
     if (!section) return;
 
-    const items = Array.from(section.checkItems);
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
+    const itemIndex = section.checkItems.findIndex(
+      (item) => item.id === itemId
+    );
+    if (itemIndex >= section.checkItems.length - 1) return;
+
+    const newItems = [...section.checkItems];
+    [newItems[itemIndex], newItems[itemIndex + 1]] = [
+      newItems[itemIndex + 1],
+      newItems[itemIndex],
+    ];
 
     // 順序を更新
-    const updatedItems = items.map((item, index) => ({
+    const updatedItems = newItems.map((item, index) => ({
       ...item,
       order: index + 1,
     }));
@@ -419,7 +475,7 @@ export default function NewTemplatePage() {
                     value={newToolInput}
                     onChange={(e) => setNewToolInput(e.target.value)}
                     placeholder="工具名を入力"
-                    onKeyPress={(e) => e.key === 'Enter' && addCommonTool()}
+                    onKeyDown={(e) => e.key === 'Enter' && addCommonTool()}
                   />
                   <Button onClick={addCommonTool} size="sm">
                     <Plus className="h-4 w-4" />
@@ -459,7 +515,7 @@ export default function NewTemplatePage() {
                     value={newSafetyNote}
                     onChange={(e) => setNewSafetyNote(e.target.value)}
                     placeholder="安全注意事項を入力"
-                    onKeyPress={(e) => e.key === 'Enter' && addSafetyNote()}
+                    onKeyDown={(e) => e.key === 'Enter' && addSafetyNote()}
                   />
                   <Button onClick={addSafetyNote} size="sm">
                     <Plus className="h-4 w-4" />
@@ -509,353 +565,286 @@ export default function NewTemplatePage() {
                     <p>セクションを追加して点検項目を設定してください</p>
                   </div>
                 ) : (
-                  <DragDropContext onDragEnd={onSectionDragEnd}>
-                    <Droppable droppableId="sections">
-                      {(provided) => (
+                  <div className="space-y-4">
+                    {template.sections
+                      .sort((a, b) => a.order - b.order)
+                      .map((section, index) => (
                         <div
-                          {...provided.droppableProps}
-                          ref={provided.innerRef}
-                          className="space-y-4"
+                          key={section.id}
+                          className="border border-gray-200 rounded-lg p-4 bg-white"
                         >
-                          {template.sections
-                            .sort((a, b) => a.order - b.order)
-                            .map((section, index) => (
-                              <Draggable
-                                key={section.id}
-                                draggableId={section.id}
-                                index={index}
+                          {/* セクションヘッダー */}
+                          <div className="flex items-center justify-between mb-4">
+                            <div className="flex items-center space-x-3 flex-1">
+                              <div className="flex flex-col space-y-1">
+                                <button
+                                  onClick={() => moveSectionUp(section.id)}
+                                  disabled={index === 0}
+                                  className="p-1 text-gray-400 hover:text-gray-600 disabled:opacity-30"
+                                >
+                                  ↑
+                                </button>
+                                <button
+                                  onClick={() => moveSectionDown(section.id)}
+                                  disabled={
+                                    index === template.sections.length - 1
+                                  }
+                                  className="p-1 text-gray-400 hover:text-gray-600 disabled:opacity-30"
+                                >
+                                  ↓
+                                </button>
+                              </div>
+                              <Badge variant="outline" className="text-xs">
+                                {index + 1}
+                              </Badge>
+                              <Input
+                                value={section.name}
+                                onChange={(e) =>
+                                  updateSection(section.id, {
+                                    name: e.target.value,
+                                  })
+                                }
+                                className="font-semibold"
+                              />
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <Input
+                                type="number"
+                                value={section.estimatedTime}
+                                onChange={(e) =>
+                                  updateSection(section.id, {
+                                    estimatedTime:
+                                      parseInt(e.target.value) || 0,
+                                  })
+                                }
+                                className="w-20 text-center"
+                                placeholder="分"
+                              />
+                              <span className="text-sm text-gray-500">分</span>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => removeSection(section.id)}
+                                className="text-red-600 hover:text-red-700"
                               >
-                                {(provided, snapshot) => (
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </div>
+
+                          {/* セクション説明 */}
+                          <div className="mb-4">
+                            <Textarea
+                              value={section.description || ''}
+                              onChange={(e) =>
+                                updateSection(section.id, {
+                                  description: e.target.value,
+                                })
+                              }
+                              placeholder="セクションの説明（任意）"
+                              rows={2}
+                            />
+                          </div>
+
+                          {/* 点検項目 */}
+                          <div>
+                            <div className="flex items-center justify-between mb-3">
+                              <h4 className="font-medium text-gray-900">
+                                点検項目
+                              </h4>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => addCheckItem(section.id)}
+                              >
+                                <Plus className="h-4 w-4 mr-1" />
+                                項目追加
+                              </Button>
+                            </div>
+
+                            <div className="space-y-3">
+                              {section.checkItems
+                                .sort((a, b) => a.order - b.order)
+                                .map((item, itemIndex) => (
                                   <div
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    className={`border border-gray-200 rounded-lg p-4 bg-white ${
-                                      snapshot.isDragging ? 'shadow-lg' : ''
-                                    }`}
+                                    key={item.id}
+                                    className="border border-gray-100 rounded-md p-3 bg-gray-50"
                                   >
-                                    {/* セクションヘッダー */}
-                                    <div className="flex items-center justify-between mb-4">
-                                      <div className="flex items-center space-x-3 flex-1">
-                                        <div
-                                          {...provided.dragHandleProps}
-                                          className="cursor-move"
-                                        >
-                                          <GripVertical className="h-5 w-5 text-gray-400" />
-                                        </div>
-                                        <Badge
-                                          variant="outline"
-                                          className="text-xs"
-                                        >
-                                          {index + 1}
-                                        </Badge>
-                                        <Input
-                                          value={section.name}
-                                          onChange={(e) =>
-                                            updateSection(section.id, {
-                                              name: e.target.value,
-                                            })
-                                          }
-                                          className="font-semibold"
-                                        />
-                                      </div>
-                                      <div className="flex items-center space-x-2">
-                                        <Input
-                                          type="number"
-                                          value={section.estimatedTime}
-                                          onChange={(e) =>
-                                            updateSection(section.id, {
-                                              estimatedTime:
-                                                parseInt(e.target.value) || 0,
-                                            })
-                                          }
-                                          className="w-20 text-center"
-                                          placeholder="分"
-                                        />
-                                        <span className="text-sm text-gray-500">
-                                          分
-                                        </span>
-                                        <Button
-                                          variant="outline"
-                                          size="sm"
+                                    <div className="flex items-start space-x-3">
+                                      <div className="flex flex-col space-y-1 mt-2">
+                                        <button
                                           onClick={() =>
-                                            removeSection(section.id)
+                                            moveCheckItemUp(section.id, item.id)
                                           }
-                                          className="text-red-600 hover:text-red-700"
+                                          disabled={itemIndex === 0}
+                                          className="p-1 text-gray-400 hover:text-gray-600 disabled:opacity-30 text-xs"
                                         >
-                                          <Trash2 className="h-4 w-4" />
-                                        </Button>
-                                      </div>
-                                    </div>
-
-                                    {/* セクション説明 */}
-                                    <div className="mb-4">
-                                      <Textarea
-                                        value={section.description || ''}
-                                        onChange={(e) =>
-                                          updateSection(section.id, {
-                                            description: e.target.value,
-                                          })
-                                        }
-                                        placeholder="セクションの説明（任意）"
-                                        rows={2}
-                                      />
-                                    </div>
-
-                                    {/* 点検項目 */}
-                                    <div>
-                                      <div className="flex items-center justify-between mb-3">
-                                        <h4 className="font-medium text-gray-900">
-                                          点検項目
-                                        </h4>
-                                        <Button
-                                          variant="outline"
-                                          size="sm"
+                                          ↑
+                                        </button>
+                                        <button
                                           onClick={() =>
-                                            addCheckItem(section.id)
+                                            moveCheckItemDown(
+                                              section.id,
+                                              item.id
+                                            )
                                           }
+                                          disabled={
+                                            itemIndex ===
+                                            section.checkItems.length - 1
+                                          }
+                                          className="p-1 text-gray-400 hover:text-gray-600 disabled:opacity-30 text-xs"
                                         >
-                                          <Plus className="h-4 w-4 mr-1" />
-                                          項目追加
-                                        </Button>
+                                          ↓
+                                        </button>
                                       </div>
-
-                                      <DragDropContext
-                                        onDragEnd={(result) =>
-                                          onCheckItemDragEnd(result, section.id)
-                                        }
-                                      >
-                                        <Droppable
-                                          droppableId={`checkItems-${section.id}`}
-                                        >
-                                          {(provided) => (
-                                            <div
-                                              {...provided.droppableProps}
-                                              ref={provided.innerRef}
-                                              className="space-y-3"
-                                            >
-                                              {section.checkItems
-                                                .sort(
-                                                  (a, b) => a.order - b.order
+                                      <div className="flex-1 space-y-3">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                          <div>
+                                            <label className="block text-xs font-medium text-gray-600 mb-1">
+                                              カテゴリ
+                                            </label>
+                                            <select
+                                              value={item.category}
+                                              onChange={(e) =>
+                                                updateCheckItem(
+                                                  section.id,
+                                                  item.id,
+                                                  {
+                                                    category: e.target.value,
+                                                  }
                                                 )
-                                                .map((item, itemIndex) => (
-                                                  <Draggable
-                                                    key={item.id}
-                                                    draggableId={item.id}
-                                                    index={itemIndex}
-                                                  >
-                                                    {(provided, snapshot) => (
-                                                      <div
-                                                        ref={provided.innerRef}
-                                                        {...provided.draggableProps}
-                                                        className={`border border-gray-100 rounded-md p-3 bg-gray-50 ${
-                                                          snapshot.isDragging
-                                                            ? 'shadow-md'
-                                                            : ''
-                                                        }`}
-                                                      >
-                                                        <div className="flex items-start space-x-3">
-                                                          <div
-                                                            {...provided.dragHandleProps}
-                                                            className="cursor-move mt-2"
-                                                          >
-                                                            <GripVertical className="h-4 w-4 text-gray-400" />
-                                                          </div>
-                                                          <div className="flex-1 space-y-3">
-                                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                                              <div>
-                                                                <label className="block text-xs font-medium text-gray-600 mb-1">
-                                                                  カテゴリ
-                                                                </label>
-                                                                <select
-                                                                  value={
-                                                                    item.category
-                                                                  }
-                                                                  onChange={(
-                                                                    e
-                                                                  ) =>
-                                                                    updateCheckItem(
-                                                                      section.id,
-                                                                      item.id,
-                                                                      {
-                                                                        category:
-                                                                          e
-                                                                            .target
-                                                                            .value,
-                                                                      }
-                                                                    )
-                                                                  }
-                                                                  className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-1 focus:ring-blue-500"
-                                                                >
-                                                                  <option value="外観確認">
-                                                                    外観確認
-                                                                  </option>
-                                                                  <option value="動作確認">
-                                                                    動作確認
-                                                                  </option>
-                                                                  <option value="清掃・潤滑">
-                                                                    清掃・潤滑
-                                                                  </option>
-                                                                  <option value="安全装置">
-                                                                    安全装置
-                                                                  </option>
-                                                                  <option value="計測・測定">
-                                                                    計測・測定
-                                                                  </option>
-                                                                  <option value="その他">
-                                                                    その他
-                                                                  </option>
-                                                                </select>
-                                                              </div>
-                                                              <div>
-                                                                <label className="block text-xs font-medium text-gray-600 mb-1">
-                                                                  点検方法
-                                                                </label>
-                                                                <Input
-                                                                  value={
-                                                                    item.checkMethod
-                                                                  }
-                                                                  onChange={(
-                                                                    e
-                                                                  ) =>
-                                                                    updateCheckItem(
-                                                                      section.id,
-                                                                      item.id,
-                                                                      {
-                                                                        checkMethod:
-                                                                          e
-                                                                            .target
-                                                                            .value,
-                                                                      }
-                                                                    )
-                                                                  }
-                                                                  placeholder="例: 目視点検"
-                                                                  className="text-sm"
-                                                                />
-                                                              </div>
-                                                            </div>
-
-                                                            <div>
-                                                              <label className="block text-xs font-medium text-gray-600 mb-1">
-                                                                点検項目
-                                                              </label>
-                                                              <Input
-                                                                value={
-                                                                  item.item
-                                                                }
-                                                                onChange={(e) =>
-                                                                  updateCheckItem(
-                                                                    section.id,
-                                                                    item.id,
-                                                                    {
-                                                                      item: e
-                                                                        .target
-                                                                        .value,
-                                                                    }
-                                                                  )
-                                                                }
-                                                                placeholder="具体的な点検項目を入力"
-                                                                className="text-sm"
-                                                              />
-                                                            </div>
-
-                                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                                              <div>
-                                                                <label className="block text-xs font-medium text-gray-600 mb-1">
-                                                                  基準値（任意）
-                                                                </label>
-                                                                <Input
-                                                                  value={
-                                                                    item.standardValue ||
-                                                                    ''
-                                                                  }
-                                                                  onChange={(
-                                                                    e
-                                                                  ) =>
-                                                                    updateCheckItem(
-                                                                      section.id,
-                                                                      item.id,
-                                                                      {
-                                                                        standardValue:
-                                                                          e
-                                                                            .target
-                                                                            .value,
-                                                                      }
-                                                                    )
-                                                                  }
-                                                                  placeholder="例: 規定範囲内"
-                                                                  className="text-sm"
-                                                                />
-                                                              </div>
-                                                              <div>
-                                                                <label className="block text-xs font-medium text-gray-600 mb-1">
-                                                                  備考（任意）
-                                                                </label>
-                                                                <Input
-                                                                  value={
-                                                                    item.notes ||
-                                                                    ''
-                                                                  }
-                                                                  onChange={(
-                                                                    e
-                                                                  ) =>
-                                                                    updateCheckItem(
-                                                                      section.id,
-                                                                      item.id,
-                                                                      {
-                                                                        notes:
-                                                                          e
-                                                                            .target
-                                                                            .value,
-                                                                      }
-                                                                    )
-                                                                  }
-                                                                  placeholder="注意点など"
-                                                                  className="text-sm"
-                                                                />
-                                                              </div>
-                                                            </div>
-                                                          </div>
-                                                          <Button
-                                                            variant="outline"
-                                                            size="sm"
-                                                            onClick={() =>
-                                                              removeCheckItem(
-                                                                section.id,
-                                                                item.id
-                                                              )
-                                                            }
-                                                            className="text-red-600 hover:text-red-700 mt-2"
-                                                          >
-                                                            <Trash2 className="h-3 w-3" />
-                                                          </Button>
-                                                        </div>
-                                                      </div>
-                                                    )}
-                                                  </Draggable>
-                                                ))}
-                                              {provided.placeholder}
-                                            </div>
-                                          )}
-                                        </Droppable>
-                                      </DragDropContext>
-
-                                      {section.checkItems.length === 0 && (
-                                        <div className="text-center py-8 text-gray-500 border border-dashed border-gray-300 rounded-md">
-                                          <p className="text-sm">
-                                            点検項目を追加してください
-                                          </p>
+                                              }
+                                              className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-1 focus:ring-blue-500"
+                                            >
+                                              <option value="外観確認">
+                                                外観確認
+                                              </option>
+                                              <option value="動作確認">
+                                                動作確認
+                                              </option>
+                                              <option value="清掃・潤滑">
+                                                清掃・潤滑
+                                              </option>
+                                              <option value="安全装置">
+                                                安全装置
+                                              </option>
+                                              <option value="計測・測定">
+                                                計測・測定
+                                              </option>
+                                              <option value="その他">
+                                                その他
+                                              </option>
+                                            </select>
+                                          </div>
+                                          <div>
+                                            <label className="block text-xs font-medium text-gray-600 mb-1">
+                                              点検方法
+                                            </label>
+                                            <Input
+                                              value={item.checkMethod}
+                                              onChange={(e) =>
+                                                updateCheckItem(
+                                                  section.id,
+                                                  item.id,
+                                                  {
+                                                    checkMethod: e.target.value,
+                                                  }
+                                                )
+                                              }
+                                              placeholder="例: 目視点検"
+                                              className="text-sm"
+                                            />
+                                          </div>
                                         </div>
-                                      )}
+
+                                        <div>
+                                          <label className="block text-xs font-medium text-gray-600 mb-1">
+                                            点検項目
+                                          </label>
+                                          <Input
+                                            value={item.item}
+                                            onChange={(e) =>
+                                              updateCheckItem(
+                                                section.id,
+                                                item.id,
+                                                {
+                                                  item: e.target.value,
+                                                }
+                                              )
+                                            }
+                                            placeholder="具体的な点検項目を入力"
+                                            className="text-sm"
+                                          />
+                                        </div>
+
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                          <div>
+                                            <label className="block text-xs font-medium text-gray-600 mb-1">
+                                              基準値（任意）
+                                            </label>
+                                            <Input
+                                              value={item.standardValue || ''}
+                                              onChange={(e) =>
+                                                updateCheckItem(
+                                                  section.id,
+                                                  item.id,
+                                                  {
+                                                    standardValue:
+                                                      e.target.value,
+                                                  }
+                                                )
+                                              }
+                                              placeholder="例: 規定範囲内"
+                                              className="text-sm"
+                                            />
+                                          </div>
+                                          <div>
+                                            <label className="block text-xs font-medium text-gray-600 mb-1">
+                                              備考（任意）
+                                            </label>
+                                            <Input
+                                              value={item.notes || ''}
+                                              onChange={(e) =>
+                                                updateCheckItem(
+                                                  section.id,
+                                                  item.id,
+                                                  {
+                                                    notes: e.target.value,
+                                                  }
+                                                )
+                                              }
+                                              placeholder="注意点など"
+                                              className="text-sm"
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() =>
+                                          removeCheckItem(section.id, item.id)
+                                        }
+                                        className="text-red-600 hover:text-red-700 mt-2"
+                                      >
+                                        <Trash2 className="h-3 w-3" />
+                                      </Button>
                                     </div>
                                   </div>
-                                )}
-                              </Draggable>
-                            ))}
-                          {provided.placeholder}
+                                ))}
+                            </div>
+
+                            {section.checkItems.length === 0 && (
+                              <div className="text-center py-8 text-gray-500 border border-dashed border-gray-300 rounded-md">
+                                <p className="text-sm">
+                                  点検項目を追加してください
+                                </p>
+                              </div>
+                            )}
+                          </div>
                         </div>
-                      )}
-                    </Droppable>
-                  </DragDropContext>
+                      ))}
+                  </div>
                 )}
               </CardContent>
             </Card>

@@ -13,6 +13,10 @@ import {
   AlertTriangle,
   CheckCircle,
   Wrench,
+  Plus,
+  MapPin,
+  Layers,
+  Filter,
 } from 'lucide-react';
 
 import { Badge } from '@shared/ui/badge';
@@ -27,6 +31,8 @@ interface Equipment {
   name: string;
   model: string;
   location: string;
+  line: string;
+  section?: string;
   status: 'operational' | 'maintenance' | 'breakdown';
   lastMaintenance: string;
   nextMaintenance: string;
@@ -34,19 +40,46 @@ interface Equipment {
   qrCode: string;
 }
 
+// マスタデータ
+const LOCATIONS = ['G4棟', 'G5棟', 'A1棟', 'A2棟', 'B1棟', 'B2棟'];
+const LINES = ['GAPLライン', '第1ライン', '第2ライン', 'プレス1ライン', 'プレス2ライン', '溶接ライン'];
+const SECTIONS = ['前面', '後面', '中央', '炉部', '制御部', 'ユーティリティ'];
+
 export default function EquipmentPage() {
   const [equipment, setEquipment] = useState<Equipment[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState<string>('all');
+  const [filterLocation, setFilterLocation] = useState<string>('all');
+  const [filterLine, setFilterLine] = useState<string>('all');
+  const [filterSection, setFilterSection] = useState<string>('all');
+
+  // フィルターリセット
+  const resetFilters = () => {
+    setFilterStatus('all');
+    setFilterLocation('all');
+    setFilterLine('all');
+    setFilterSection('all');
+    setSearchTerm('');
+  };
+
+  // アクティブフィルター数
+  const activeFiltersCount = [
+    filterStatus !== 'all',
+    filterLocation !== 'all',
+    filterLine !== 'all',
+    filterSection !== 'all',
+  ].filter(Boolean).length;
 
   useEffect(() => {
     // サンプル設備データ
     setEquipment([
       {
         id: 'EQ-001',
-        name: 'CNCフライス盤 #1',
+        name: '結束機',
         model: 'DMG MORI DMU 50',
-        location: '第1工場 A棟',
+        location: 'G4棟',
+        line: 'GAPLライン',
+        section: '後面',
         status: 'operational',
         lastMaintenance: '2024-12-15',
         nextMaintenance: '2025-01-15',
@@ -56,9 +89,11 @@ export default function EquipmentPage() {
       },
       {
         id: 'EQ-002',
-        name: 'プレス機 #3',
+        name: 'リール',
         model: 'AIDA NC1-250',
-        location: '第2工場 B棟',
+        location: 'G4棟',
+        line: 'GAPLライン',
+        section: '後面',
         status: 'maintenance',
         lastMaintenance: '2024-12-20',
         nextMaintenance: '2025-02-20',
@@ -68,9 +103,11 @@ export default function EquipmentPage() {
       },
       {
         id: 'EQ-003',
-        name: '溶接機 #7',
+        name: 'コイルカー',
         model: 'Lincoln MIG-500',
-        location: '第1工場 C棟',
+        location: 'G4棟',
+        line: 'GAPLライン',
+        section: '後面',
         status: 'operational',
         lastMaintenance: '2024-11-30',
         nextMaintenance: '2025-01-30',
@@ -80,9 +117,11 @@ export default function EquipmentPage() {
       },
       {
         id: 'EQ-004',
-        name: 'コンベア #2',
+        name: '制御盤',
         model: 'FlexLink X85',
-        location: '第2工場 A棟',
+        location: 'G4棟',
+        line: 'GAPLライン',
+        section: '前面',
         status: 'breakdown',
         lastMaintenance: '2024-12-10',
         nextMaintenance: '2025-01-10',
@@ -92,9 +131,10 @@ export default function EquipmentPage() {
       },
       {
         id: 'EQ-005',
-        name: 'CNCフライス盤 #2',
+        name: 'CNCフライス盤 #1',
         model: 'Okuma MB-5000H',
-        location: '第1工場 A棟',
+        location: 'A1棟',
+        line: '第1ライン',
         status: 'operational',
         lastMaintenance: '2024-12-25',
         nextMaintenance: '2025-02-25',
@@ -104,15 +144,44 @@ export default function EquipmentPage() {
       },
       {
         id: 'EQ-006',
-        name: 'プレス機 #5',
+        name: 'プレス機 #1',
         model: 'AMADA TP-110',
-        location: '第2工場 B棟',
+        location: 'B1棟',
+        line: 'プレス1ライン',
+        section: '中央',
         status: 'operational',
         lastMaintenance: '2024-12-18',
         nextMaintenance: '2025-01-18',
         image:
           'https://images.pexels.com/photos/162553/keys-workshop-mechanic-tools-162553.jpeg',
         qrCode: 'QR-EQ-006',
+      },
+      {
+        id: 'EQ-007',
+        name: '溶接機 #1',
+        model: 'Lincoln Electric',
+        location: 'G5棟',
+        line: '溶接ライン',
+        section: '炉部',
+        status: 'operational',
+        lastMaintenance: '2024-12-22',
+        nextMaintenance: '2025-01-22',
+        image:
+          'https://images.pexels.com/photos/162553/keys-workshop-mechanic-tools-162553.jpeg',
+        qrCode: 'QR-EQ-007',
+      },
+      {
+        id: 'EQ-008',
+        name: '検査装置',
+        model: 'KEYENCE CV-X',
+        location: 'A2棟',
+        line: '第2ライン',
+        status: 'maintenance',
+        lastMaintenance: '2024-12-19',
+        nextMaintenance: '2025-01-19',
+        image:
+          'https://images.pexels.com/photos/162553/keys-workshop-mechanic-tools-162553.jpeg',
+        qrCode: 'QR-EQ-008',
       },
     ]);
   }, []);
@@ -160,10 +229,16 @@ export default function EquipmentPage() {
     const matchesSearch =
       item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.model.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.location.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesFilter =
-      filterStatus === 'all' || item.status === filterStatus;
-    return matchesSearch && matchesFilter;
+      item.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.line.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (item.section && item.section.toLowerCase().includes(searchTerm.toLowerCase()));
+    
+    const matchesStatus = filterStatus === 'all' || item.status === filterStatus;
+    const matchesLocation = filterLocation === 'all' || item.location === filterLocation;
+    const matchesLine = filterLine === 'all' || item.line === filterLine;
+    const matchesSection = filterSection === 'all' || item.section === filterSection;
+    
+    return matchesSearch && matchesStatus && matchesLocation && matchesLine && matchesSection;
   });
 
   return (
@@ -177,13 +252,14 @@ export default function EquipmentPage() {
 
         {/* 検索・フィルター */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
-          <div className="flex flex-col sm:flex-row gap-4">
+          {/* 検索バー */}
+          <div className="flex flex-col lg:flex-row gap-4 mb-4">
             <div className="flex-1">
               <div className="relative">
                 <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                 <Input
                   type="text"
-                  placeholder="設備名、型式、場所で検索..."
+                  placeholder="設備名、型式、ライン、セクションで検索..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-10 h-12"
@@ -191,16 +267,12 @@ export default function EquipmentPage() {
               </div>
             </div>
             <div className="flex gap-2">
-              <select
-                value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              >
-                <option value="all">すべてのステータス</option>
-                <option value="operational">稼働中</option>
-                <option value="maintenance">メンテナンス中</option>
-                <option value="breakdown">故障</option>
-              </select>
+              <Link href="/equipment/new">
+                <Button className="h-12 bg-green-600 hover:bg-green-700">
+                  <Plus className="h-4 w-4 mr-2" />
+                  設備登録
+                </Button>
+              </Link>
               <Link href="/equipment/scan">
                 <Button className="h-12 bg-blue-600 hover:bg-blue-700">
                   <QrCode className="h-4 w-4 mr-2" />
@@ -208,6 +280,116 @@ export default function EquipmentPage() {
                 </Button>
               </Link>
             </div>
+          </div>
+
+          {/* フィルター */}
+          <div className="border-t pt-4">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-3">
+                <Filter className="h-4 w-4 text-gray-500" />
+                <span className="text-sm font-medium text-gray-700">フィルター</span>
+                {activeFiltersCount > 0 && (
+                  <Badge variant="secondary" className="text-xs">
+                    {activeFiltersCount}個適用中
+                  </Badge>
+                )}
+              </div>
+              {activeFiltersCount > 0 && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={resetFilters}
+                  className="text-xs text-gray-500 hover:text-gray-700"
+                >
+                  リセット
+                </Button>
+              )}
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              <div>
+                <label className="block text-xs font-medium text-gray-600 mb-1">
+                  ステータス
+                </label>
+                <select
+                  value={filterStatus}
+                  onChange={(e) => setFilterStatus(e.target.value)}
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="all">すべて</option>
+                  <option value="operational">稼働中</option>
+                  <option value="maintenance">メンテナンス中</option>
+                  <option value="breakdown">故障</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-medium text-gray-600 mb-1">
+                  <MapPin className="inline h-3 w-3 mr-1" />
+                  ロケーション
+                </label>
+                <select
+                  value={filterLocation}
+                  onChange={(e) => setFilterLocation(e.target.value)}
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="all">すべて</option>
+                  {LOCATIONS.map((location) => (
+                    <option key={location} value={location}>
+                      {location}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-medium text-gray-600 mb-1">
+                  ライン
+                </label>
+                <select
+                  value={filterLine}
+                  onChange={(e) => setFilterLine(e.target.value)}
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="all">すべて</option>
+                  {LINES.map((line) => (
+                    <option key={line} value={line}>
+                      {line}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-medium text-gray-600 mb-1">
+                  <Layers className="inline h-3 w-3 mr-1" />
+                  セクション
+                </label>
+                <select
+                  value={filterSection}
+                  onChange={(e) => setFilterSection(e.target.value)}
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="all">すべて</option>
+                  {SECTIONS.map((section) => (
+                    <option key={section} value={section}>
+                      {section}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 結果表示 */}
+        <div className="flex items-center justify-between mb-6">
+          <div className="text-sm text-gray-600">
+            {filteredEquipment.length}件の設備が見つかりました
+            {equipment.length !== filteredEquipment.length && (
+              <span className="text-gray-400 ml-1">
+                (全{equipment.length}件中)
+              </span>
+            )}
           </div>
         </div>
 
@@ -248,7 +430,18 @@ export default function EquipmentPage() {
                         <p className="text-sm text-gray-600 mb-1">
                           {item.model}
                         </p>
-                        <p className="text-xs text-gray-500">{item.location}</p>
+                        <div className="text-xs text-gray-500 space-y-1">
+                          <div className="flex items-center">
+                            <MapPin className="h-3 w-3 mr-1" />
+                            {item.location} - {item.line}
+                          </div>
+                          {item.section && (
+                            <div className="flex items-center">
+                              <Layers className="h-3 w-3 mr-1" />
+                              {item.section}
+                            </div>
+                          )}
+                        </div>
                       </div>
                       <div className="bg-gray-100 p-2 rounded-lg">
                         <QrCode className="h-6 w-6 text-gray-600" />
