@@ -13,6 +13,8 @@ import {
   ChevronRight,
 } from 'lucide-react';
 
+import Link from 'next/link';
+
 import { Badge } from '@shared/ui/badge';
 import { Button } from '@shared/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@shared/ui/card';
@@ -154,9 +156,11 @@ export default function SuperAdminPage() {
                       <Button variant="outline" size="sm">
                         <Edit className="h-4 w-4" />
                       </Button>
-                      <Button variant="outline" size="sm">
-                        <ChevronRight className="h-4 w-4" />
-                      </Button>
+                      <Link href={`/super-admin/organization-builder?tenant=${tenant.id}`}>
+                        <Button variant="outline" size="sm">
+                          <ChevronRight className="h-4 w-4" />
+                        </Button>
+                      </Link>
                     </div>
                   </div>
                 </CardContent>

@@ -20,6 +20,8 @@ import { Input } from '@shared/ui/input';
 import { Label } from '@shared/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@shared/ui/tabs';
 
+import Link from 'next/link';
+
 import { MainLayout } from '@widgets/layout';
 
 // テナント設定の型定義
@@ -175,7 +177,11 @@ export default function TenantSettingsPage() {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
+            <TabsTrigger value="organization" className="flex items-center gap-2">
+              <Building className="h-4 w-4" />
+              組織構造
+            </TabsTrigger>
             <TabsTrigger value="factories" className="flex items-center gap-2">
               <Factory className="h-4 w-4" />
               工場・ライン管理
@@ -193,6 +199,64 @@ export default function TenantSettingsPage() {
               会社情報
             </TabsTrigger>
           </TabsList>
+
+          {/* 組織構造管理 */}
+          <TabsContent value="organization" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>柔軟な組織構造管理</CardTitle>
+                <p className="text-sm text-gray-600">
+                  複雑な階層構造を自由に設定し、権限を柔軟に割り当てることができます
+                </p>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-6">
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <h4 className="font-semibold text-blue-900 mb-2">現在の組織構造例</h4>
+                    <div className="text-sm text-blue-800 space-y-1">
+                      <div>日本製鉄 → 八幡製鉄所 → 薄板部 → 冷延めっき工場 → めっき課 → GAPLライン</div>
+                      <div>日本製鉄 → 八幡製鉄所 → 熱延部 → 熱延工場 → 圧延課 → 第1圧延ライン</div>
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="border rounded-lg p-4">
+                      <h4 className="font-semibold mb-3">組織階層の特徴</h4>
+                      <ul className="text-sm text-gray-600 space-y-2">
+                        <li>• 部門ごとに異なる階層深度に対応</li>
+                        <li>• 製鉄所、部、課、ラインを自由に組み合わせ</li>
+                        <li>• 権限をノード単位で細かく設定</li>
+                        <li>• ユーザーを適切なレベルに配置</li>
+                      </ul>
+                    </div>
+                    
+                    <div className="border rounded-lg p-4">
+                      <h4 className="font-semibold mb-3">権限管理</h4>
+                      <ul className="text-sm text-gray-600 space-y-2">
+                        <li>• ユーザー管理権限</li>
+                        <li>• 設備管理権限</li>
+                        <li>• 点検管理権限</li>
+                        <li>• レポート閲覧権限</li>
+                      </ul>
+                    </div>
+                  </div>
+                  
+                  <div className="flex gap-4">
+                    <Link href="/admin/tenant-settings/organization">
+                      <Button className="bg-blue-600 hover:bg-blue-700">
+                        <Building className="h-4 w-4 mr-2" />
+                        組織構造を編集
+                      </Button>
+                    </Link>
+                    <Button variant="outline">
+                      <Users className="h-4 w-4 mr-2" />
+                      権限テンプレート
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
 
           {/* 工場・ライン管理 */}
           <TabsContent value="factories" className="space-y-6">
