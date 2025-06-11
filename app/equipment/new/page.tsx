@@ -89,9 +89,11 @@ interface EquipmentRegistration {
 }
 
 export default function NewEquipmentPage() {
+  // デフォルトでGAPLラインを選択（実際のアプリでは現在選択されているラインから取得）
+  const defaultLineId = 'GAPL';
   const [registration, setRegistration] = useState<EquipmentRegistration>({
     id: '',
-    lineId: '',
+    lineId: defaultLineId, // 初期値として選択されたラインを設定
     useSections: false, // デフォルトはセクション構造なし
     sections: [],
     equipment: [],
@@ -360,52 +362,35 @@ export default function NewEquipmentPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* 左側: 基本設定 */}
           <div className="lg:col-span-1 space-y-6">
-            {/* ライン選択 */}
+            {/* 対象ライン情報 */}
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg font-semibold flex items-center">
                   <Building className="h-5 w-5 mr-2" />
-                  ライン選択
+                  対象ライン
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div>
-                  <Label htmlFor="line">
-                    対象ライン <span className="text-red-500">*</span>
-                  </Label>
-                  <select
-                    id="line"
-                    value={registration.lineId}
-                    onChange={(e) =>
-                      setRegistration((prev) => ({
-                        ...prev,
-                        lineId: e.target.value,
-                      }))
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  >
-                    <option value="">ラインを選択</option>
-                    {LINES.map((line) => (
-                      <option key={line.id} value={line.id}>
-                        {line.name} - {line.location}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                {selectedLine && (
-                  <div className="bg-blue-50 p-3 rounded-lg">
-                    <div className="space-y-1">
-                      <div className="flex items-center text-sm text-blue-800">
-                        <MapPin className="h-4 w-4 mr-2" />
-                        <span className="font-medium">{selectedLine.name}</span>
+                {selectedLine ? (
+                  <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                    <div className="space-y-2">
+                      <div className="flex items-center text-lg font-semibold text-blue-900">
+                        <MapPin className="h-5 w-5 mr-2" />
+                        <span>{selectedLine.name}</span>
                       </div>
-                      <div className="text-sm text-blue-600">
+                      <div className="text-sm text-blue-700">
                         {selectedLine.description}
                       </div>
-                      <div className="text-xs text-blue-500">
+                      <div className="text-xs text-blue-600 bg-blue-100 px-2 py-1 rounded inline-block">
                         ロケーション: {selectedLine.location}
                       </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                    <div className="text-center text-gray-500">
+                      <Building className="h-8 w-8 mx-auto mb-2 text-gray-400" />
+                      <p className="text-sm">ライン情報が設定されていません</p>
                     </div>
                   </div>
                 )}
@@ -413,12 +398,11 @@ export default function NewEquipmentPage() {
             </Card>
 
             {/* セクション構造設定 */}
-            {registration.lineId && (
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg font-semibold flex items-center">
-                    <Layers className="h-5 w-5 mr-2" />
-                    構造設定
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg font-semibold flex items-center">
+                  <Layers className="h-5 w-5 mr-2" />
+                  構造設定
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -460,19 +444,11 @@ export default function NewEquipmentPage() {
                   </div>
                 </CardContent>
               </Card>
-            )}
           </div>
 
           {/* 右側: 設備設定 */}
           <div className="lg:col-span-2">
-            {!registration.lineId ? (
-              <Card>
-                <CardContent className="text-center py-12 text-gray-500">
-                  <Building className="h-12 w-12 mx-auto mb-4 text-gray-400" />
-                  <p>まずラインを選択してください</p>
-                </CardContent>
-              </Card>
-            ) : registration.useSections ? (
+            {registration.useSections ? (
               // セクション構造
               <Card>
                 <CardHeader>

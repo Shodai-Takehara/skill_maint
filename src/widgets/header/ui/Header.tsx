@@ -2,11 +2,21 @@
 
 import { useState } from 'react';
 
-import { Bell, Menu } from 'lucide-react';
+import { Bell, Menu, Settings, Shield, User, LogOut } from 'lucide-react';
+
+import Link from 'next/link';
 
 import { cn } from '@shared/lib';
 import { Badge } from '@shared/ui/badge';
 import { Button } from '@shared/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@shared/ui/dropdown-menu';
 
 import { LineSelector } from '@widgets/line-selector';
 import { NotificationPanel } from '@widgets/notifications';
@@ -20,6 +30,13 @@ export function Header({ onMenuClick }: HeaderProps) {
   const [notifications] = useState(3);
   const [showNotifications, setShowNotifications] = useState(false);
   const [selectedLineId, setSelectedLineId] = useState<string>('line-1-1');
+  
+  // ユーザー情報（実際のアプリではContextやStoreから取得）
+  const currentUser = {
+    name: '山田 太郎',
+    email: 'yamada@example.com',
+    role: 'super_admin', // super_admin | tenant_admin | line_manager | operator | viewer
+  };
 
   const handleLineSelect = (lineId: string, _lineName: string) => {
     setSelectedLineId(lineId);
@@ -147,6 +164,78 @@ export function Header({ onMenuClick }: HeaderProps) {
               />
             )}
           </div>
+
+          {/* ユーザーメニュー */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                className={cn(
+                  'h-12 w-12 p-0 rounded-xl transition-all duration-300',
+                  'hover:bg-primary-200/40 dark:hover:bg-surface-dark-tertiary/40',
+                  'border border-primary-300/20 dark:border-surface-dark-tertiary/20',
+                  'shadow-sm backdrop-blur-sm hover:shadow-md hover:scale-105',
+                  'text-primary-700 dark:text-primary-300'
+                )}
+              >
+                <User className="h-5 w-5" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuLabel>
+                <div className="flex flex-col space-y-1">
+                  <p className="text-sm font-medium leading-none">{currentUser.name}</p>
+                  <p className="text-xs text-gray-500">{currentUser.email}</p>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              
+              {/* スーパー管理者メニュー */}
+              {currentUser.role === 'super_admin' && (
+                <>
+                  <Link href="/super-admin">
+                    <DropdownMenuItem className="cursor-pointer">
+                      <Shield className="mr-2 h-4 w-4" />
+                      <span>システム管理</span>
+                    </DropdownMenuItem>
+                  </Link>
+                  <DropdownMenuSeparator />
+                </>
+              )}
+
+              {/* 管理者メニュー（権限に応じて表示） */}
+              {(currentUser.role === 'tenant_admin' || currentUser.role === 'line_manager') && (
+                <>
+                  <Link href="/admin/tenant-settings">
+                    <DropdownMenuItem className="cursor-pointer">
+                      <Shield className="mr-2 h-4 w-4" />
+                      <span>管理者設定</span>
+                    </DropdownMenuItem>
+                  </Link>
+                  <DropdownMenuSeparator />
+                </>
+              )}
+              
+              <Link href="/profile">
+                <DropdownMenuItem className="cursor-pointer">
+                  <User className="mr-2 h-4 w-4" />
+                  <span>プロフィール</span>
+                </DropdownMenuItem>
+              </Link>
+              <Link href="/settings">
+                <DropdownMenuItem className="cursor-pointer">
+                  <Settings className="mr-2 h-4 w-4" />
+                  <span>設定</span>
+                </DropdownMenuItem>
+              </Link>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className="cursor-pointer text-red-600">
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>ログアウト</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </header>
