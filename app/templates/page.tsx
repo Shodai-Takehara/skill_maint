@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import Link from 'next/link';
 
-import { Plus, Settings, Copy, Trash2, Edit, Eye, Search } from 'lucide-react';
+import { Copy, Edit, Eye, Plus, Search, Settings, Trash2 } from 'lucide-react';
 
 import { Badge } from '@shared/ui/badge';
 import { Button } from '@shared/ui/button';
@@ -17,6 +17,7 @@ import {
 } from '@shared/ui/dialog';
 import { Input } from '@shared/ui/input';
 
+import { TemplatesPage } from '@views/templates';
 import { MainLayout } from '@widgets/layout';
 
 interface InspectionCheckItem {
@@ -755,4 +756,8 @@ export default function TemplatesPage() {
       </div>
     </MainLayout>
   );
+}
+
+export default function Templates() {
+  return <TemplatesPage />;
 }

@@ -82,16 +82,80 @@
       'rlig' 1,
       'calt' 1;
   }
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 84% 4.9%;
+  --primary: 221.2 83.2% 53.3%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 210 40% 96%;
+  --secondary-foreground: 222.2 84% 4.9%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  --accent: 210 40% 96%;
+  --accent-foreground: 222.2 84% 4.9%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 221.2 83.2% 53.3%;
+  --radius: 0.75rem;
 }
 
-/* Apple-style glass morphism effects */
-.glass-effect {
-  backdrop-filter: blur(20px);
-  background: rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+* {
+  border-color: hsl(var(--border));
 }
 
-/* Smooth transitions for all interactive elements */
+body {
+  background-color: #ffffff;
+  color: hsl(var(--foreground));
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+/* Touch-friendly styles for factory environments */
+.touch-target {
+  min-height: 48px;
+  min-width: 48px;
+}
+
+/* High contrast for outdoor visibility */
+.high-contrast {
+  color: #000000;
+  background-color: #ffffff;
+}
+
+/* Glove-compatible interface */
+.glove-friendly {
+  padding: 16px;
+  border: 2px solid transparent;
+}
+
+.glove-friendly:focus {
+  border-color: #2563eb;
+  outline: none;
+}
+
+/* Visual feedback for noisy environments */
+.visual-feedback {
+  transition: all 0.2s ease-in-out;
+}
+
+.visual-feedback:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.visual-feedback:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Smooth micro-interactions */
 .smooth-transition {
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
