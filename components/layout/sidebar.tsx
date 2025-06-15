@@ -7,7 +7,6 @@ import {
   LayoutDashboard,
   ClipboardCheck,
   FileText,
-  Calendar,
   BarChart3,
   Settings,
   Users,
@@ -25,42 +24,42 @@ interface SidebarProps {
 
 const navigation = [
   {
-    name: 'Dashboard',
+    name: 'ダッシュボード',
     href: '/',
     icon: LayoutDashboard,
   },
   {
-    name: 'Daily Inspections',
+    name: '日常点検',
     href: '/inspections',
     icon: ClipboardCheck,
     children: [
-      { name: 'Today\'s Schedule', href: '/inspections' },
-      { name: 'Quick Inspection', href: '/inspections/quick' },
-      { name: 'Inspection History', href: '/inspections/history' },
+      { name: '本日の予定', href: '/inspections' },
+      { name: 'クイック点検', href: '/inspections/quick' },
+      { name: '点検履歴', href: '/inspections/history' },
     ]
   },
   {
-    name: 'Templates',
+    name: 'テンプレート',
     href: '/templates',
     icon: FileText,
   },
   {
-    name: 'Equipment',
+    name: '設備',
     href: '/equipment',
     icon: Settings,
   },
   {
-    name: 'Work Orders',
+    name: '作業指示',
     href: '/work-orders',
     icon: Wrench,
   },
   {
-    name: 'Analytics',
+    name: '分析',
     href: '/analytics',
     icon: BarChart3,
   },
   {
-    name: 'Team & Skills',
+    name: 'チーム・スキル',
     href: '/team',
     icon: Users,
   },

@@ -17,7 +17,6 @@ import {
 } from '@shared/ui/dialog';
 import { Input } from '@shared/ui/input';
 
-import { TemplatesPage } from '@views/templates';
 import { MainLayout } from '@widgets/layout';
 
 interface InspectionCheckItem {
@@ -59,7 +58,7 @@ interface InspectionTemplate {
   usageCount: number;
 }
 
-export default function TemplatesPage() {
+export default function Templates() {
   const [templates, setTemplates] = useState<InspectionTemplate[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState<string>('all');
@@ -758,6 +757,3 @@ export default function TemplatesPage() {
   );
 }
 
-export default function Templates() {
-  return <TemplatesPage />;
-}

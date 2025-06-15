@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 
-import { Bell, Menu, Settings, Shield, User, LogOut } from 'lucide-react';
-
 import Link from 'next/link';
+
+import { Bell, LogOut, Menu, Settings, Shield, User } from 'lucide-react';
 
 import { cn } from '@shared/lib';
 import { Badge } from '@shared/ui/badge';
@@ -30,12 +30,12 @@ export function Header({ onMenuClick }: HeaderProps) {
   const [notifications] = useState(3);
   const [showNotifications, setShowNotifications] = useState(false);
   const [selectedLineId, setSelectedLineId] = useState<string>('line-1-1');
-  
+
   // ユーザー情報（実際のアプリではContextやStoreから取得）
   const currentUser = {
     name: '山田 太郎',
     email: 'yamada@example.com',
-    role: 'super_admin', // super_admin | tenant_admin | line_manager | operator | viewer
+    role: 'tenant_admin', // tenant_admin | line_manager | operator | viewer
   };
 
   const handleLineSelect = (lineId: string, _lineName: string) => {
@@ -88,12 +88,12 @@ export function Header({ onMenuClick }: HeaderProps) {
               <div
                 className={cn(
                   'flex items-center space-x-2 px-3 py-1.5 rounded-xl',
-                  'bg-accent-green/10 border border-accent-green/20',
+                  'bg-green-50 border border-green-200',
                   'backdrop-blur-sm shadow-sm'
                 )}
               >
-                <div className="w-2 h-2 bg-accent-green rounded-full animate-pulse shadow-sm"></div>
-                <span className="text-sm text-accent-green font-semibold">
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse shadow-sm"></div>
+                <span className="text-sm text-green-600 font-semibold">
                   オンライン
                 </span>
               </div>
@@ -101,12 +101,12 @@ export function Header({ onMenuClick }: HeaderProps) {
               <div
                 className={cn(
                   'flex items-center space-x-2 px-3 py-1.5 rounded-xl',
-                  'bg-accent-red/10 border border-accent-red/20',
+                  'bg-red-50 border border-red-200',
                   'backdrop-blur-sm shadow-sm'
                 )}
               >
-                <div className="w-2 h-2 bg-accent-red rounded-full shadow-sm"></div>
-                <span className="text-sm text-accent-red font-semibold">
+                <div className="w-2 h-2 bg-red-500 rounded-full shadow-sm"></div>
+                <span className="text-sm text-red-600 font-semibold">
                   オフライン
                 </span>
               </div>
@@ -118,9 +118,9 @@ export function Header({ onMenuClick }: HeaderProps) {
             <Badge
               className={cn(
                 'text-xs font-semibold px-3 py-1.5 rounded-xl',
-                'bg-gradient-to-r from-primary-500 to-primary-600 text-white',
-                'border border-primary-400/20 shadow-md shadow-primary-500/25',
-                'hover:from-primary-600 hover:to-primary-700 transition-all duration-300'
+                'bg-blue-600 text-white',
+                'border border-blue-500/20 shadow-md',
+                'hover:bg-blue-700 transition-all duration-300'
               )}
             >
               v2.1.0
@@ -146,10 +146,9 @@ export function Header({ onMenuClick }: HeaderProps) {
                 <div
                   className={cn(
                     'absolute -top-1 -right-1 h-6 w-6 rounded-full',
-                    'bg-gradient-to-r from-accent-red to-accent-red/90',
+                    'bg-red-500',
                     'text-white text-xs flex items-center justify-center font-bold',
-                    'border-2 border-white dark:border-surface-dark shadow-lg',
-                    'animate-bounce-gentle'
+                    'border-2 border-white shadow-lg'
                   )}
                 >
                   {notifications}
@@ -185,27 +184,17 @@ export function Header({ onMenuClick }: HeaderProps) {
             <DropdownMenuContent align="end" className="w-56">
               <DropdownMenuLabel>
                 <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">{currentUser.name}</p>
+                  <p className="text-sm font-medium leading-none">
+                    {currentUser.name}
+                  </p>
                   <p className="text-xs text-gray-500">{currentUser.email}</p>
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              
-              {/* スーパー管理者メニュー */}
-              {currentUser.role === 'super_admin' && (
-                <>
-                  <Link href="/super-admin">
-                    <DropdownMenuItem className="cursor-pointer">
-                      <Shield className="mr-2 h-4 w-4" />
-                      <span>システム管理</span>
-                    </DropdownMenuItem>
-                  </Link>
-                  <DropdownMenuSeparator />
-                </>
-              )}
 
               {/* 管理者メニュー（権限に応じて表示） */}
-              {(currentUser.role === 'tenant_admin' || currentUser.role === 'line_manager') && (
+              {(currentUser.role === 'tenant_admin' ||
+                currentUser.role === 'line_manager') && (
                 <>
                   <Link href="/admin/tenant-settings">
                     <DropdownMenuItem className="cursor-pointer">
@@ -216,7 +205,7 @@ export function Header({ onMenuClick }: HeaderProps) {
                   <DropdownMenuSeparator />
                 </>
               )}
-              
+
               <Link href="/profile">
                 <DropdownMenuItem className="cursor-pointer">
                   <User className="mr-2 h-4 w-4" />

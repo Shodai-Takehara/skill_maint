@@ -28,7 +28,7 @@ export function CompanySelector() {
         <div className="flex items-center">
           <Building2 className="mr-2 h-4 w-4" />
           <span className="truncate">
-            {currentCompany?.name || "Select company..."}
+            {currentCompany?.name || "会社を選択..."}
           </span>
         </div>
         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />

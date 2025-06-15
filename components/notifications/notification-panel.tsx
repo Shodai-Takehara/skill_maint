@@ -27,24 +27,24 @@ export function NotificationPanel({ onClose }: NotificationPanelProps) {
     setNotifications([
       {
         id: '1',
-        title: 'Inspection Overdue',
-        message: 'CNC Machine #3 daily inspection is 2 hours overdue',
+        title: '点検期限切れ',
+        message: 'CNCフライス盤 #3の日常点検が2時間超過しています',
         type: 'error',
         timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
         read: false
       },
       {
         id: '2',
-        title: 'Temperature Warning',
-        message: 'Hydraulic system temperature is approaching upper limit',
+        title: '温度警告',
+        message: '油圧システムの温度が上限に近づいています',
         type: 'warning',
         timestamp: new Date(Date.now() - 30 * 60 * 1000),
         read: false
       },
       {
         id: '3',
-        title: 'Inspection Completed',
-        message: 'Press Machine #2 morning inspection completed successfully',
+        title: '点検完了',
+        message: 'プレス機 #2の朝の点検が正常に完了しました',
         type: 'success',
         timestamp: new Date(Date.now() - 60 * 60 * 1000),
         read: true
@@ -76,7 +76,7 @@ export function NotificationPanel({ onClose }: NotificationPanelProps) {
   return (
     <div className="absolute right-0 top-full mt-2 w-80 bg-background border rounded-lg shadow-soft-lg z-50">
       <div className="flex items-center justify-between p-4 border-b">
-        <h3 className="font-semibold">Notifications</h3>
+        <h3 className="font-semibold">通知</h3>
         <Button variant="ghost" size="icon" onClick={onClose}>
           <X className="h-4 w-4" />
         </Button>
@@ -85,7 +85,7 @@ export function NotificationPanel({ onClose }: NotificationPanelProps) {
       <div className="max-h-96 overflow-y-auto">
         {notifications.length === 0 ? (
           <div className="p-4 text-center text-muted-foreground">
-            No notifications
+            通知がありません
           </div>
         ) : (
           <div className="divide-y">
@@ -128,7 +128,7 @@ export function NotificationPanel({ onClose }: NotificationPanelProps) {
 
       <div className="p-4 border-t">
         <Button variant="outline" className="w-full" size="sm">
-          View All Notifications
+          すべての通知を表示
         </Button>
       </div>
     </div>
