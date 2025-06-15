@@ -71,6 +71,19 @@ export {
   SelectValue,
 } from './select';
 
+// Enhanced SelectBox Components
+export {
+  SelectBox,
+  FormSelectBox,
+  FilterSelectBox,
+  StatusSelectBox,
+  SearchableSelectBox,
+  UserSelectBox,
+  HierarchicalSelectBox,
+  selectBoxPresets,
+} from './select-box';
+export type { SelectBoxProps, SelectOption, SelectGroup } from './select-box';
+
 // Data Display
 export {
   Table,
