@@ -10,6 +10,7 @@ import { Badge } from '@shared/ui/badge';
 import { Button } from '@shared/ui/button';
 import { Card, CardContent } from '@shared/ui/card';
 import { Input } from '@shared/ui/input';
+import { FilterSelectBox } from '@shared/ui';
 
 import { MainLayout } from '@widgets/layout';
 
@@ -26,6 +27,28 @@ interface WorkOrder {
   dueDate: string;
   estimatedTime: string;
 }
+
+// フィルターオプション
+const STATUS_OPTIONS = [
+  { value: 'all', label: 'すべて' },
+  { value: 'pending', label: '待機中' },
+  { value: 'in-progress', label: '作業中' },
+  { value: 'completed', label: '完了' },
+  { value: 'cancelled', label: 'キャンセル' },
+];
+
+const PRIORITY_OPTIONS = [
+  { value: 'all', label: 'すべて' },
+  { value: 'emergency', label: '緊急' },
+  { value: 'urgent', label: '至急' },
+  { value: 'normal', label: '通常' },
+];
+
+const SORT_OPTIONS = [
+  { value: 'createdAt', label: '作成日時順' },
+  { value: 'dueDate', label: '期限順' },
+  { value: 'priority', label: '優先度順' },
+];
 
 export default function WorkOrdersPage() {
   const [workOrders, setWorkOrders] = useState<WorkOrder[]>([]);
@@ -217,36 +240,28 @@ export default function WorkOrdersPage() {
                   className="pl-10"
                 />
               </div>
-              <select
+              <FilterSelectBox
                 value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              >
-                <option value="all">すべてのステータス</option>
-                <option value="pending">待機中</option>
-                <option value="in-progress">作業中</option>
-                <option value="completed">完了</option>
-                <option value="cancelled">キャンセル</option>
-              </select>
-              <select
+                onValueChange={setFilterStatus}
+                placeholder="ステータス"
+                options={STATUS_OPTIONS}
+                size="md"
+              />
+              <FilterSelectBox
                 value={filterPriority}
-                onChange={(e) => setFilterPriority(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              >
-                <option value="all">すべての優先度</option>
-                <option value="emergency">緊急</option>
-                <option value="urgent">至急</option>
-                <option value="normal">通常</option>
-              </select>
-              <select
+                onValueChange={setFilterPriority}
+                placeholder="優先度"
+                options={PRIORITY_OPTIONS}
+                size="md"
+              />
+              <FilterSelectBox
                 value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              >
-                <option value="createdAt">作成日時順</option>
-                <option value="dueDate">期限順</option>
-                <option value="priority">優先度順</option>
-              </select>
+                onValueChange={setSortBy}
+                placeholder="並び順"
+                options={SORT_OPTIONS}
+                size="md"
+                showClearAll={false}
+              />
             </div>
           </CardContent>
         </Card>

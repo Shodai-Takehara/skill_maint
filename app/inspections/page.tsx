@@ -23,6 +23,7 @@ import {
   DialogTitle,
 } from '@shared/ui/dialog';
 import { Input } from '@shared/ui/input';
+import { FilterSelectBox } from '@shared/ui';
 
 import { MainLayout } from '@widgets/layout';
 
@@ -75,6 +76,22 @@ interface ScheduledInspection {
   completionRate?: number;
   template?: InspectionTemplate;
 }
+
+// フィルターオプション
+const STATUS_OPTIONS = [
+  { value: 'all', label: 'すべてのステータス' },
+  { value: 'pending', label: '待機中' },
+  { value: 'in_progress', label: '実行中' },
+  { value: 'completed', label: '完了' },
+  { value: 'overdue', label: '期限超過' },
+];
+
+const SHIFT_OPTIONS = [
+  { value: 'all', label: 'すべてのシフト' },
+  { value: '朝番', label: '朝番' },
+  { value: '昼番', label: '昼番' },
+  { value: '夜番', label: '夜番' },
+];
 
 export default function InspectionsPage() {
   const [inspections, setInspections] = useState<ScheduledInspection[]>([]);
@@ -602,31 +619,20 @@ export default function InspectionsPage() {
                   className="pl-4"
                 />
               </div>
-              <select
+              <FilterSelectBox
                 value={filterStatus}
-                onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                  setFilterStatus(e.target.value)
-                }
-                className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
-              >
-                <option value="all">すべてのステータス</option>
-                <option value="pending">待機中</option>
-                <option value="in_progress">実行中</option>
-                <option value="completed">完了</option>
-                <option value="overdue">期限超過</option>
-              </select>
-              <select
+                onValueChange={setFilterStatus}
+                placeholder="ステータス"
+                options={STATUS_OPTIONS}
+                size="md"
+              />
+              <FilterSelectBox
                 value={filterShift}
-                onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                  setFilterShift(e.target.value)
-                }
-                className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
-              >
-                <option value="all">すべてのシフト</option>
-                <option value="朝番">朝番</option>
-                <option value="昼番">昼番</option>
-                <option value="夜番">夜番</option>
-              </select>
+                onValueChange={setFilterShift}
+                placeholder="シフト"
+                options={SHIFT_OPTIONS}
+                size="md"
+              />
             </div>
           </CardContent>
         </Card>

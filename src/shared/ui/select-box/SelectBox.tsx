@@ -2,11 +2,10 @@
 
 import { forwardRef } from 'react';
 
-import { Check, ChevronDown, Search } from 'lucide-react';
+import { Check, Search } from 'lucide-react';
 
 import { cn } from '@shared/lib';
 import { Badge } from '@shared/ui/badge';
-import { Button } from '@shared/ui/button';
 import { Input } from '@shared/ui/input';
 import {
   Select,
@@ -41,36 +40,35 @@ export interface SelectBoxProps {
   onValueChange?: (value: string) => void;
   options?: SelectOption[];
   groups?: SelectGroup[];
-  
+
   // 外観・サイズ
   size?: 'sm' | 'md' | 'lg';
   variant?: 'default' | 'outline' | 'ghost';
   fullWidth?: boolean;
-  
+
   // 機能
   searchable?: boolean;
   clearable?: boolean;
-  multiple?: boolean;
   loading?: boolean;
   disabled?: boolean;
-  
+
   // UI拡張
   showIcons?: boolean;
   showBadges?: boolean;
   showDescriptions?: boolean;
   maxDisplayItems?: number;
-  
+
   // スタイル
   className?: string;
   triggerClassName?: string;
   contentClassName?: string;
-  
+
   // アクセシビリティ
   name?: string;
   id?: string;
   'aria-label'?: string;
   'aria-describedby'?: string;
-  
+
   // イベント
   onSearch?: (searchTerm: string) => void;
   onClear?: () => void;
@@ -92,7 +90,6 @@ const SelectBox = forwardRef<HTMLButtonElement, SelectBoxProps>(
       fullWidth = true,
       searchable = false,
       clearable = false,
-      multiple = false,
       loading = false,
       disabled = false,
       showIcons = true,
@@ -122,24 +119,25 @@ const SelectBox = forwardRef<HTMLButtonElement, SelectBoxProps>(
 
     // バリアントスタイル
     const variantClasses = {
-      default: 'border-input bg-background hover:bg-accent hover:text-accent-foreground',
-      outline: 'border-2 border-input bg-transparent hover:bg-accent hover:text-accent-foreground',
-      ghost: 'border-transparent bg-transparent hover:bg-accent hover:text-accent-foreground',
+      default:
+        'border-input bg-background hover:bg-accent hover:text-accent-foreground',
+      outline:
+        'border-2 border-input bg-transparent hover:bg-accent hover:text-accent-foreground',
+      ghost:
+        'border-transparent bg-transparent hover:bg-accent hover:text-accent-foreground',
     };
 
     // 全てのオプションを統合（グループ化されたものと個別のもの）
     const allOptions = [
       ...options,
-      ...groups.flatMap(group => group.options)
+      ...groups.flatMap((group) => group.options),
     ].slice(0, maxDisplayItems);
 
     // 選択されたオプションを見つける
-    const selectedOption = allOptions.find(opt => opt.value === value);
+    const selectedOption = allOptions.find((opt) => opt.value === value);
 
     // プレースホルダーの表示
-    const displayValue = selectedOption 
-      ? selectedOption.label 
-      : placeholder;
+    const displayValue = selectedOption ? selectedOption.label : placeholder;
 
     // クリア機能
     const handleClear = (e: React.MouseEvent) => {
@@ -210,51 +208,54 @@ const SelectBox = forwardRef<HTMLButtonElement, SelectBoxProps>(
             sizeClasses[size],
             variantClasses[variant],
             fullWidth && 'w-full',
-            'justify-between',
             disabled && 'opacity-50 cursor-not-allowed',
             loading && 'cursor-wait',
             triggerClassName,
             className
           )}
         >
-          <SelectValue placeholder={placeholder}>
-            <div className="flex items-center gap-2 flex-1 min-w-0">
-              {selectedOption && showIcons && selectedOption.icon && (
-                <span className="flex-shrink-0">{selectedOption.icon}</span>
-              )}
-              <span className="truncate">{displayValue}</span>
-              {selectedOption && showBadges && selectedOption.badge && (
-                <Badge
-                  variant={selectedOption.badge.variant || 'secondary'}
-                  className="text-xs flex-shrink-0"
-                >
-                  {selectedOption.badge.text}
-                </Badge>
-              )}
-            </div>
-          </SelectValue>
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-2 flex-1 min-w-0 overflow-hidden">
+            {selectedOption ? (
+              <>
+                {showIcons && selectedOption.icon && (
+                  <span className="flex-shrink-0">{selectedOption.icon}</span>
+                )}
+                <span className="truncate flex-1">{selectedOption.label}</span>
+                {showBadges && selectedOption.badge && (
+                  <Badge
+                    variant={selectedOption.badge.variant || 'secondary'}
+                    className="text-xs flex-shrink-0"
+                  >
+                    {selectedOption.badge.text}
+                  </Badge>
+                )}
+              </>
+            ) : (
+              <SelectValue
+                placeholder={placeholder}
+                className="text-muted-foreground"
+              />
+            )}
             {clearable && value && (
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                className="h-4 w-4 p-0 hover:bg-destructive hover:text-destructive-foreground"
+              <span
+                role="button"
+                tabIndex={0}
+                className="h-4 w-4 flex items-center justify-center rounded-sm hover:bg-destructive hover:text-destructive-foreground cursor-pointer text-xs ml-auto"
                 onClick={handleClear}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleClear(e as any);
+                  }
+                }}
               >
                 ×
-              </Button>
+              </span>
             )}
-            <ChevronDown className="h-4 w-4 opacity-50" />
           </div>
         </SelectTrigger>
 
-        <SelectContent
-          className={cn(
-            'max-h-[300px]',
-            contentClassName
-          )}
-        >
+        <SelectContent className={cn('max-h-[300px]', contentClassName)}>
           {searchable && (
             <div className="flex items-center border-b px-3 pb-2">
               <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />

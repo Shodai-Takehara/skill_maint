@@ -23,6 +23,7 @@ import { Badge } from '@shared/ui/badge';
 import { Button } from '@shared/ui/button';
 import { Card, CardContent } from '@shared/ui/card';
 import { Input } from '@shared/ui/input';
+import { FilterSelectBox } from '@shared/ui';
 
 import { MainLayout } from '@widgets/layout';
 
@@ -44,6 +45,29 @@ interface Equipment {
 const LOCATIONS = ['G4棟', 'G5棟', 'A1棟', 'A2棟', 'B1棟', 'B2棟'];
 const LINES = ['GAPLライン', '第1ライン', '第2ライン', 'プレス1ライン', 'プレス2ライン', '溶接ライン'];
 const SECTIONS = ['前面', '後面', '中央', '炉部', '制御部', 'ユーティリティ'];
+
+// フィルターオプション
+const STATUS_OPTIONS = [
+  { value: 'all', label: 'すべて' },
+  { value: 'operational', label: '稼働中' },
+  { value: 'maintenance', label: 'メンテナンス中' },
+  { value: 'breakdown', label: '故障' },
+];
+
+const LOCATION_OPTIONS = [
+  { value: 'all', label: 'すべて' },
+  ...LOCATIONS.map(location => ({ value: location, label: location })),
+];
+
+const LINE_OPTIONS = [
+  { value: 'all', label: 'すべて' },
+  ...LINES.map(line => ({ value: line, label: line })),
+];
+
+const SECTION_OPTIONS = [
+  { value: 'all', label: 'すべて' },
+  ...SECTIONS.map(section => ({ value: section, label: section })),
+];
 
 export default function EquipmentPage() {
   const [equipment, setEquipment] = useState<Equipment[]>([]);
@@ -310,16 +334,13 @@ export default function EquipmentPage() {
                 <label className="block text-xs font-medium text-gray-600 mb-1">
                   ステータス
                 </label>
-                <select
+                <FilterSelectBox
                   value={filterStatus}
-                  onChange={(e) => setFilterStatus(e.target.value)}
-                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  <option value="all">すべて</option>
-                  <option value="operational">稼働中</option>
-                  <option value="maintenance">メンテナンス中</option>
-                  <option value="breakdown">故障</option>
-                </select>
+                  onValueChange={setFilterStatus}
+                  placeholder="ステータス"
+                  options={STATUS_OPTIONS}
+                  size="sm"
+                />
               </div>
 
               <div>
@@ -327,36 +348,26 @@ export default function EquipmentPage() {
                   <MapPin className="inline h-3 w-3 mr-1" />
                   ロケーション
                 </label>
-                <select
+                <FilterSelectBox
                   value={filterLocation}
-                  onChange={(e) => setFilterLocation(e.target.value)}
-                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  <option value="all">すべて</option>
-                  {LOCATIONS.map((location) => (
-                    <option key={location} value={location}>
-                      {location}
-                    </option>
-                  ))}
-                </select>
+                  onValueChange={setFilterLocation}
+                  placeholder="ロケーション"
+                  options={LOCATION_OPTIONS}
+                  size="sm"
+                />
               </div>
 
               <div>
                 <label className="block text-xs font-medium text-gray-600 mb-1">
                   ライン
                 </label>
-                <select
+                <FilterSelectBox
                   value={filterLine}
-                  onChange={(e) => setFilterLine(e.target.value)}
-                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  <option value="all">すべて</option>
-                  {LINES.map((line) => (
-                    <option key={line} value={line}>
-                      {line}
-                    </option>
-                  ))}
-                </select>
+                  onValueChange={setFilterLine}
+                  placeholder="ライン"
+                  options={LINE_OPTIONS}
+                  size="sm"
+                />
               </div>
 
               <div>
@@ -364,18 +375,13 @@ export default function EquipmentPage() {
                   <Layers className="inline h-3 w-3 mr-1" />
                   セクション
                 </label>
-                <select
+                <FilterSelectBox
                   value={filterSection}
-                  onChange={(e) => setFilterSection(e.target.value)}
-                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  <option value="all">すべて</option>
-                  {SECTIONS.map((section) => (
-                    <option key={section} value={section}>
-                      {section}
-                    </option>
-                  ))}
-                </select>
+                  onValueChange={setFilterSection}
+                  placeholder="セクション"
+                  options={SECTION_OPTIONS}
+                  size="sm"
+                />
               </div>
             </div>
           </div>

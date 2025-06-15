@@ -2,7 +2,9 @@
 
 import { forwardRef } from 'react';
 
-import { SelectBox, SelectBoxProps, SelectOption, SelectGroup } from './SelectBox';
+import { cn } from '@shared/lib';
+
+import { SelectBox, SelectBoxProps, SelectOption } from './SelectBox';
 
 // フォーム用セレクトボックス
 interface FormSelectBoxProps extends Omit<SelectBoxProps, 'variant' | 'size'> {
@@ -50,16 +52,15 @@ FormSelectBox.displayName = 'FormSelectBox';
 // フィルター用セレクトボックス
 interface FilterSelectBoxProps extends Omit<SelectBoxProps, 'variant' | 'clearable'> {
   showClearAll?: boolean;
-  compact?: boolean;
 }
 
 export const FilterSelectBox = forwardRef<HTMLButtonElement, FilterSelectBoxProps>(
-  ({ showClearAll = true, compact = true, size, ...props }, ref) => {
+  ({ showClearAll = true, size = 'sm', ...props }, ref) => {
     return (
       <SelectBox
         ref={ref}
         variant="outline"
-        size={compact ? 'sm' : size || 'md'}
+        size={size}
         clearable={showClearAll}
         fullWidth={false}
         {...props}
@@ -235,5 +236,3 @@ export const HierarchicalSelectBox = forwardRef<HTMLButtonElement, HierarchicalS
 );
 
 HierarchicalSelectBox.displayName = 'HierarchicalSelectBox';
-
-import { cn } from '@shared/lib';

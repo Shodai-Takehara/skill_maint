@@ -11,6 +11,7 @@ import { Badge } from '@shared/ui/badge';
 import { Button } from '@shared/ui/button';
 import { Card, CardContent } from '@shared/ui/card';
 import { Input } from '@shared/ui/input';
+import { FilterSelectBox } from '@shared/ui';
 
 import { MainLayout } from '@widgets/layout';
 
@@ -251,6 +252,11 @@ export default function TeamPage() {
     new Set(teamMembers.map((member) => member.department))
   );
 
+  const departmentOptions = [
+    { value: 'all', label: 'すべて' },
+    ...departments.map(dept => ({ value: dept, label: dept })),
+  ];
+
   return (
     <MainLayout>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -282,18 +288,13 @@ export default function TeamPage() {
                   className="pl-10"
                 />
               </div>
-              <select
+              <FilterSelectBox
                 value={filterDepartment}
-                onChange={(e) => setFilterDepartment(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              >
-                <option value="all">すべての部署</option>
-                {departments.map((dept) => (
-                  <option key={dept} value={dept}>
-                    {dept}
-                  </option>
-                ))}
-              </select>
+                onValueChange={setFilterDepartment}
+                placeholder="部署"
+                options={departmentOptions}
+                size="md"
+              />
             </div>
           </CardContent>
         </Card>

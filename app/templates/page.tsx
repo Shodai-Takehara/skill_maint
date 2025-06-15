@@ -16,6 +16,7 @@ import {
   DialogTitle,
 } from '@shared/ui/dialog';
 import { Input } from '@shared/ui/input';
+import { FilterSelectBox } from '@shared/ui';
 
 import { MainLayout } from '@widgets/layout';
 
@@ -57,6 +58,14 @@ interface InspectionTemplate {
   lastUsed?: string;
   usageCount: number;
 }
+
+// フィルターオプション
+const TYPE_OPTIONS = [
+  { value: 'all', label: 'すべて' },
+  { value: 'equipment', label: '設備用' },
+  { value: 'line', label: 'ライン用' },
+  { value: 'area', label: 'エリア用' },
+];
 
 export default function Templates() {
   const [templates, setTemplates] = useState<InspectionTemplate[]>([]);
@@ -454,18 +463,13 @@ export default function Templates() {
                   className="pl-10"
                 />
               </div>
-              <select
+              <FilterSelectBox
                 value={filterType}
-                onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                  setFilterType(e.target.value)
-                }
-                className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
-              >
-                <option value="all">すべてのタイプ</option>
-                <option value="equipment">設備用</option>
-                <option value="line">ライン用</option>
-                <option value="area">エリア用</option>
-              </select>
+                onValueChange={setFilterType}
+                placeholder="タイプ"
+                options={TYPE_OPTIONS}
+                size="md"
+              />
             </div>
           </CardContent>
         </Card>
