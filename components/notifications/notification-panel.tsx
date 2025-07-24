@@ -220,9 +220,9 @@ export function NotificationPanel({ isOpen, onClose }: NotificationPanelProps) {
 
   return (
     <>
-      {/* オーバーレイ（全デバイス対応） */}
+      {/* モバイル・タブレット用オーバーレイ */}
       <div
-        className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40"
+        className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 lg:hidden"
         onClick={onClose}
       />
 
@@ -279,7 +279,7 @@ export function NotificationPanel({ isOpen, onClose }: NotificationPanelProps) {
           </CardHeader>
 
           {/* コンテンツ（スクロール可能） */}
-          <CardContent className="flex-1 p-0 overflow-hidden min-h-0">
+          <CardContent className="flex-1 p-0 overflow-hidden">
             {notifications.length === 0 ? (
               <div className="flex flex-col items-center justify-center p-8 text-center h-48">
                 <Bell className="h-12 w-12 text-gray-300 mb-3" />
